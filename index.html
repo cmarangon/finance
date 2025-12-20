@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persönliche Finanzen meistern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Fraunces:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 2025 Minimal Dark Theme - Single Accent Color */
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #141416;
+            --bg-tertiary: #1c1c1f;
+            --bg-card: #18181b;
+            --bg-hover: #27272a;
+            
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            
+            --accent: #d4a574;
+            --accent-hover: #e5c9a8;
+            --accent-subtle: rgba(212, 165, 116, 0.1);
+            
+            --border: #27272a;
+            --border-subtle: #1f1f23;
+            
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            
+            --font-serif: 'Fraunces', Georgia, serif;
+            --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            
+            --transition-fast: 0.15s ease;
+            --transition-medium: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-serif);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        h4 {
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1rem 2rem;
+            transition: var(--transition-medium);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 11, 0.95);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            list-style: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: var(--transition-fast);
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-subtle) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: var(--bg-primary);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 100px;
+            transition: var(--transition-medium);
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-cta:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .hero-cta svg {
+            transition: var(--transition-fast);
+        }
+
+        .hero-cta:hover svg {
+            transform: translateY(2px);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.6s forwards, float 2s ease-in-out infinite 1.4s;
+        }
+
+        .scroll-hint svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-muted);
+        }
+
+        /* Sections */
+        section {
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+        }
+
+        /* Cards Grid - Bento Style */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: var(--transition-medium);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            border-color: var(--border);
+            background: var(--bg-tertiary);
+            transform: translateY(-4px);
+        }
+
+        .card-sm { grid-column: span 4; }
+        .card-md { grid-column: span 6; }
+        .card-lg { grid-column: span 8; }
+        .card-full { grid-column: span 12; }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-subtle);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        /* Feature List */
+        .feature-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list svg {
+            flex-shrink: 0;
+            color: var(--accent);
+            margin-top: 0.25rem;
+        }
+
+        /* Stats */
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stat-value {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9375rem;
+        }
+
+        th, td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--bg-secondary);
+        }
+
+        tr:hover td {
+            background: var(--bg-hover);
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin: 1.5rem 0;
+        }
+
+        /* Tooltips for Terms */
+        .term {
+            position: relative;
+            color: var(--accent);
+            cursor: help;
+            border-bottom: 1px dotted var(--accent);
+        }
+
+        .term .tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8125rem;
+            white-space: nowrap;
+            max-width: 280px;
+            white-space: normal;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-fast);
+            z-index: 100;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .term:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: var(--accent-subtle);
+            border-left: 3px solid var(--accent);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .info-box p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Comparison Grid */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-item {
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .comparison-item.negative {
+            border-color: rgba(248, 113, 113, 0.3);
+            background: rgba(248, 113, 113, 0.05);
+        }
+
+        .comparison-item.positive {
+            border-color: rgba(74, 222, 128, 0.3);
+            background: rgba(74, 222, 128, 0.05);
+        }
+
+        .comparison-item h5 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .comparison-item.negative h5 {
+            color: var(--danger);
+        }
+
+        .comparison-item.positive h5 {
+            color: var(--success);
+        }
+
+        /* Progress Steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+            transition: var(--transition-medium);
+        }
+
+        .step:hover {
+            border-color: var(--accent);
+            background: var(--bg-tertiary);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h5 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.9375rem;
+        }
+
+        /* Settings Button */
+        .settings-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-medium);
+            z-index: 999;
+        }
+
+        .settings-fab:hover {
+            background: var(--accent-hover);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .settings-fab svg {
+            color: var(--bg-primary);
+        }
+
+        /* Modal/Dialog */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-header p {
+            font-size: 0.9375rem;
+            margin: 0;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 2rem 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group input[type="number"],
+        .control-group input[type="range"] {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: var(--transition-fast);
+        }
+
+        .control-group input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg-card);
+        }
+
+        .control-hint {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .input-with-unit {
+            position: relative;
+        }
+
+        .input-with-unit input {
+            padding-right: 3rem;
+        }
+
+        .input-with-unit .unit {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: none;
+            font-family: var(--font-sans);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        /* Range Input Styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            padding: 0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            display: inline-block;
+            background: var(--accent-subtle);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .card-sm, .card-md, .card-lg { grid-column: span 6; }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 5rem 1.5rem;
+            }
+
+            .card-sm, .card-md, .card-lg, .card-full {
+                grid-column: span 12;
+            }
+
+            nav ul {
+                gap: 0.25rem;
+            }
+
+            nav a {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 280px;
+            }
+
+            .settings-fab {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 56px;
+                height: 56px;
+            }
+
+            .modal-overlay {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <ul>
+            <li><a href="#hero">Start</a></li>
+            <li><a href="#budget">Budget</a></li>
+            <li><a href="#echtkosten">Echtkosten</a></li>
+            <li><a href="#lifestyle">Lifestyle</a></li>
+            <li><a href="#schulden">Schulden</a></li>
+            <li><a href="#notgroschen">Notgroschen</a></li>
+            <li><a href="#investieren">Investieren</a></li>
+            <li><a href="#arten">Anlagearten</a></li>
+            <li><a href="#p2p">P2P-Kredite</a></li>
+            <li><a href="#risiko">Risiko</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>Persönliche Finanzen <span>meistern</span></h1>
+            <p>Von den Grundlagen bis zur ersten Investition – verstehe die wichtigsten Prinzipien für langfristigen finanziellen Erfolg.</p>
+            <div class="info-box" style="max-width: 600px; margin: 0 auto 2rem;">
+                <p style="text-align: left;"><strong>💡 Tipp:</strong> Klicke auf das Einstellungs-Icon unten rechts, um die Berechnungen an deine persönliche Situation anzupassen (Sparzins, Sparrate, Alter).</p>
+            </div>
+            <a href="#echtkosten" class="hero-cta">
+                Jetzt starten
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+            </a>
+        </div>
+        <div class="scroll-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Section 1: Budget -->
+    <section id="budget">
+        <div class="section-header">
+            <h4>Kapitel 01</h4>
+            <h2>Budgetierung: Die Grundlage</h2>
+            <p>Bevor du investierst oder sparst, musst du wissen, wohin dein Geld fliesst. Ein solides Budget ist der erste Schritt zu finanzieller Freiheit.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-md">
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                </div>
+                <h3>Die 50/30/20 Regel</h3>
+                <p>Eine einfache Faustregel für die Aufteilung deines Nettoeinkommens:</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>50% Fixkosten:</strong> Miete, Versicherungen, Transport, Lebensmittel
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>30% Lifestyle:</strong> Freizeit, Restaurants, Hobbies, Shopping
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>20% Sparen & Investieren:</strong> Notgroschen, Altersvorsorge, Vermögensaufbau
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-md">
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18 17V9"/>
+                        <path d="M13 17V5"/>
+                        <path d="M8 17v-3"/>
+                    </svg>
+                </div>
+                <h3>Beispiel-Budget</h3>
+                <p>Bei CHF 5'000 Nettoeinkommen:</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kategorie</th>
+                                <th>Betrag</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Fixkosten</strong></td>
+                                <td class="highlight">CHF 2'500</td>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Miete</td>
+                                <td>CHF 1'500</td>
+                                <td>30%</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Lebensmittel</td>
+                                <td>CHF 600</td>
+                                <td>12%</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Transport</td>
+                                <td>CHF 200</td>
+                                <td>4%</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left: 2rem;">Versicherungen</td>
+                                <td>CHF 200</td>
+                                <td>4%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lifestyle</strong></td>
+                                <td class="highlight">CHF 1'500</td>
+                                <td>30%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sparen</strong></td>
+                                <td class="highlight">CHF 1'000</td>
+                                <td>20%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Schritt für Schritt zum eigenen Budget</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5>Einnahmen erfassen</h5>
+                            <p>Liste alle Einkommensquellen: Gehalt, Nebenverdienste, passive Einkünfte</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5>Ausgaben tracken</h5>
+                            <p>Dokumentiere 1-2 Monate lang ALLE Ausgaben (Apps: YNAB, Splitwise, Excel)</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5>Kategorisieren</h5>
+                            <p>Teile Ausgaben in Fix-, Variable- und Sparkosten auf</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h5>Optimieren</h5>
+                            <p>Identifiziere Sparpotentiale und setze realistische Limits</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h5>Automatisieren</h5>
+                            <p>Richte Daueraufträge für Sparen und Fixkosten ein</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Fixkosten vs. Variable Kosten</h3>
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h5 style="color: var(--text-primary);">Fixkosten (gleichbleibend)</h5>
+                        <ul class="feature-list" style="margin-top: 0.5rem;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Miete / Hypothek
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Versicherungen
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Abonnements
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Kreditraten
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item">
+                        <h5 style="color: var(--text-primary);">Variable Kosten (schwankend)</h5>
+                        <ul class="feature-list" style="margin-top: 0.5rem;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Lebensmittel
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Restaurants & Ausgehen
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Shopping & Kleidung
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Unterhaltung & Hobbies
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Häufige Budget-Fehler</h3>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                        Unrealistische Ziele setzen (zu streng)
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                        Unregelmässige Ausgaben vergessen (Geschenke, Ferien)
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                        Kein Budget-Puffer einplanen
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                        Nach 1 schlechtem Monat aufgeben
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-full">
+                <h3>Budget-Tools & Apps</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>Typ</th>
+                                <th>Kosten</th>
+                                <th>Besonderheit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>YNAB</strong></td>
+                                <td>App & Web</td>
+                                <td>~$15/Mt</td>
+                                <td>Zero-Based Budgeting, sehr detailliert</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Excel/Google Sheets</strong></td>
+                                <td>Spreadsheet</td>
+                                <td>Gratis</td>
+                                <td>Volle Kontrolle, individuell anpassbar</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Splitwise</strong></td>
+                                <td>App</td>
+                                <td>Gratis</td>
+                                <td>Ausgaben mit anderen teilen</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mint</strong></td>
+                                <td>App & Web</td>
+                                <td>Gratis</td>
+                                <td>Automatische Kategorisierung (nur USA)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Neon/Yuh</strong></td>
+                                <td>Banking App</td>
+                                <td>Gratis</td>
+                                <td>Schweizer Neobanken mit Budget-Features</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-box" style="margin-top: 1.5rem;">
+                    <p><strong>Tipp:</strong> Wähle ein Tool, das du realistisch 3+ Monate durchziehst. Lieber einfach starten (z.B. mit Excel) als mit der perfekten App scheitern.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Echtkosten -->
+    <section id="echtkosten">
+        <div class="section-header">
+            <h4>Kapitel 02</h4>
+            <h2>Echtkosten richtig rechnen</h2>
+            <p>Der Kaufpreis ist nur die Spitze des Eisbergs. Die wahren Kosten einer Anschaffung zeigen sich erst über die Zeit.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-md">
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                </div>
+                <h3>Die TCO-Formel</h3>
+                <p>Die <span class="term">Total Cost of Ownership<span class="tooltip">Gesamtbetriebskosten über die gesamte Nutzungsdauer eines Produkts</span></span> berücksichtigt alle Kosten über die gesamte Lebensdauer.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Anschaffungspreis
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Betriebskosten (Strom, Verbrauch, Wartung)
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Reparaturen und Ersatzteile
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <span class="term">Opportunitätskosten<span class="tooltip">Entgangener Nutzen durch nicht gewählte Alternativen (z.B. verpasste Rendite)</span></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-md">
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                    </svg>
+                </div>
+                <h3>Beispiel: Auto</h3>
+                <p>Ein Auto für CHF 30'000 kostet über 5 Jahre erheblich mehr als der Kaufpreis.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <td>Kaufpreis</td>
+                            <td class="highlight">CHF 30'000</td>
+                        </tr>
+                        <tr>
+                            <td>Wertverlust (5 Jahre)</td>
+                            <td>CHF 15'000</td>
+                        </tr>
+                        <tr>
+                            <td>Versicherung</td>
+                            <td>CHF 7'500</td>
+                        </tr>
+                        <tr>
+                            <td>Treibstoff</td>
+                            <td>CHF 9'000</td>
+                        </tr>
+                        <tr>
+                            <td>Service & Reparaturen</td>
+                            <td>CHF 5'000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total 5 Jahre</strong></td>
+                            <td class="highlight"><strong>CHF 66'500</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Zeitwert des Geldes</h3>
+                <p>Der <span class="term">Zinseszins<span class="tooltip">Zinsen auf bereits verdiente Zinsen – der Haupttreiber langfristigen Vermögensaufbaus</span></span> ist der mächtigste Effekt bei langfristigen Finanzen. CHF 10'000 heute sind mehr wert als CHF 10'000 in 10 Jahren.</p>
+                <div class="chart-container">
+                    <canvas id="compoundChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Lifestyle-Inflation -->
+    <section id="lifestyle">
+        <div class="section-header">
+            <h4>Kapitel 03</h4>
+            <h2>Lifestyle-Inflation verstehen</h2>
+            <p>Wenn das Einkommen steigt, steigen oft auch die Ausgaben proportional mit – ohne echten Gewinn an Lebensqualität.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-lg">
+                <h3>Die Psychologie dahinter</h3>
+                <p>Lifestyle-Inflation entsteht durch verschiedene psychologische Mechanismen:</p>
+                
+                <div class="comparison">
+                    <div class="comparison-item negative">
+                        <h5>Typische Fallen</h5>
+                        <ul class="feature-list" style="margin-top: 0;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                <span class="term">Hedonische Anpassung<span class="tooltip">Gewöhnung an verbesserte Lebensumstände – nach kurzer Zeit fühlt sich der neue Standard "normal" an</span></span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Sozialer Vergleich mit Peers
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                "Ich habe es verdient"-Denken
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item positive">
+                        <h5>Gegenmassnahmen</h5>
+                        <ul class="feature-list" style="margin-top: 0;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                <span class="term">Pay Yourself First<span class="tooltip">Automatisch einen festen Prozentsatz des Einkommens sparen, bevor andere Ausgaben getätigt werden</span></span>
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Sparrate bei Gehaltserhöhung steigern
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Werte statt Status priorisieren
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-sm">
+                <div class="stat">
+                    <div class="stat-value">50%</div>
+                    <div class="stat-label">der Gehaltserhöhung sollte gespart werden</div>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Sparrate vs. Lifestyle: Der langfristige Unterschied</h3>
+                <div class="chart-container">
+                    <canvas id="lifestyleChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Schuldenmanagement -->
+    <section id="schulden">
+        <div class="section-header">
+            <h4>Kapitel 04</h4>
+            <h2>Schulden intelligent managen</h2>
+            <p>Nicht alle Schulden sind gleich. Die richtige Strategie kann tausende Franken sparen.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-md">
+                <h3>Gute vs. schlechte Schulden</h3>
+                
+                <div class="comparison">
+                    <div class="comparison-item positive">
+                        <h5>Gute Schulden</h5>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Investitionen, die Wert schaffen oder Einkommen generieren</p>
+                        <ul class="feature-list" style="margin-top: 0.5rem;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Bildungskredite mit ROI
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Hypotheken für Eigenheim
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Geschäftsinvestitionen
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item negative">
+                        <h5>Schlechte Schulden</h5>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Konsum ohne Wertsteigerung, hohe Zinsen</p>
+                        <ul class="feature-list" style="margin-top: 0.5rem;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Kreditkartenschulden (15-20%)
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Konsumkredite
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Autoleasing für Luxus
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Tilgungsstrategien</h3>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5><span class="term">Avalanche-Methode<span class="tooltip">Zuerst die Schuld mit dem höchsten Zinssatz tilgen – mathematisch optimal</span></span></h5>
+                            <p>Höchste Zinsen zuerst tilgen. Mathematisch optimal, spart am meisten Geld.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5><span class="term">Snowball-Methode<span class="tooltip">Kleinste Schulden zuerst tilgen – psychologisch motivierend durch schnelle Erfolge</span></span></h5>
+                            <p>Kleinste Schulden zuerst. Schnelle Erfolge motivieren zum Weitermachen.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5>Konsolidierung prüfen</h5>
+                            <p>Mehrere Schulden zu einem günstigeren Kredit zusammenfassen, wenn möglich.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Avalanche vs. Snowball: Beispielrechnung</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Schuld</th>
+                                <th>Betrag</th>
+                                <th>Zinssatz</th>
+                                <th>Avalanche Reihenfolge</th>
+                                <th>Snowball Reihenfolge</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Kreditkarte</td>
+                                <td>CHF 5'000</td>
+                                <td class="highlight">18%</td>
+                                <td>1. (höchster Zins)</td>
+                                <td>2.</td>
+                            </tr>
+                            <tr>
+                                <td>Kleinkredit</td>
+                                <td>CHF 2'500</td>
+                                <td>12%</td>
+                                <td>2.</td>
+                                <td>1. (kleinster Betrag)</td>
+                            </tr>
+                            <tr>
+                                <td>Autokredit</td>
+                                <td>CHF 15'000</td>
+                                <td>6%</td>
+                                <td>3.</td>
+                                <td>3.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-box">
+                    <p><strong>Tipp:</strong> Die Avalanche-Methode spart bei diesem Beispiel ca. CHF 1'200 an Zinsen. Die Snowball-Methode kann aber psychologisch effektiver sein, wenn Motivation ein Problem ist.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Notgroschen -->
+    <section id="notgroschen">
+        <div class="section-header">
+            <h4>Kapitel 05</h4>
+            <h2>Der Notgroschen</h2>
+            <p>Dein finanzielles Sicherheitsnetz für unvorhergesehene Ereignisse.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-sm">
+                <div class="stat">
+                    <div class="stat-value">3-6</div>
+                    <div class="stat-label">Monatsausgaben als Minimum</div>
+                </div>
+            </div>
+
+            <div class="card card-sm">
+                <div class="stat">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Liquidität – jederzeit verfügbar</div>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Aufbau-Strategie</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5>Mini-Notgroschen (CHF 1'000)</h5>
+                            <p>Für kleine Notfälle sofort aufbauen</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5>Schulden tilgen</h5>
+                            <p>Hochverzinste Schulden priorisieren</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5>Vollen Notgroschen aufbauen</h5>
+                            <p>3-6 Monatsausgaben ansparen</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h5>Investieren beginnen</h5>
+                            <p>Überschüssiges Geld anlegen</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Wohin mit dem Notgroschen?</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Option</th>
+                                <th>Liquidität</th>
+                                <th>Sicherheit</th>
+                                <th>Rendite</th>
+                                <th>Empfehlung</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sparkonto</td>
+                                <td>Sofort</td>
+                                <td>Sehr hoch</td>
+                                <td id="savingsRateTable">~1%</td>
+                                <td class="highlight">Ideal</td>
+                            </tr>
+                            <tr>
+                                <td>Tagesgeld</td>
+                                <td>Sofort</td>
+                                <td>Sehr hoch</td>
+                                <td id="tagesgeldRateTable">~1-2%</td>
+                                <td class="highlight">Sehr gut</td>
+                            </tr>
+                            <tr>
+                                <td>Festgeld</td>
+                                <td>Nach Laufzeit</td>
+                                <td>Sehr hoch</td>
+                                <td>~2-3%</td>
+                                <td>Nur für Überschuss</td>
+                            </tr>
+                            <tr>
+                                <td>Aktien/ETFs</td>
+                                <td>1-3 Tage</td>
+                                <td>Volatil</td>
+                                <td>~7%</td>
+                                <td>Nicht geeignet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Investieren Grundlagen -->
+    <section id="investieren">
+        <div class="section-header">
+            <h4>Kapitel 06</h4>
+            <h2>Investieren Grundlagen</h2>
+            <p>Warum investieren wichtig ist und wie du langfristig Vermögen aufbaust.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-md">
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <h3>Warum investieren?</h3>
+                <p>Inflation entwertet Bargeld. Langfristig verlierst du mit reinem Sparen Kaufkraft.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Inflation: ~2% jährlich
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Sparkonto: <span id="savingsRateText">~1%</span> Rendite
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Aktienmarkt historisch: ~7% real
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-md">
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 3v18h18"/>
+                        <path d="m19 9-5 5-4-4-3 3"/>
+                    </svg>
+                </div>
+                <h3>Die Macht der Zeit</h3>
+                <p>Je früher du anfängst, desto mehr arbeitet der <span class="term">Zinseszins<span class="tooltip">Zinsen auf bereits verdiente Zinsen – exponentielles Wachstum über Zeit</span></span> für dich.</p>
+                <div class="info-box">
+                    <p id="compoundExampleText"><strong>Beispiel:</strong> CHF 200/Monat ab 25 Jahren = CHF 525'000 mit 65<br>
+                    Dieselbe Summe ab 35 Jahren = nur CHF 245'000</p>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Aktive vs. Passive Fonds – Der grosse Unterschied</h3>
+                <p>Die Kostenstruktur macht langfristig einen enormen Unterschied. <span class="term">ETFs<span class="tooltip">Exchange Traded Funds: Börsengehandelte Indexfonds mit niedriger Kostenquote</span></span> schlagen langfristig die meisten aktiv gemanagten Fonds.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Jahr</th>
+                                <th>Aktiver Fonds (2% <span class="term">TER<span class="tooltip">Total Expense Ratio: Jährliche Gesamtkostenquote eines Fonds</span></span>)</th>
+                                <th>ETF (0.2% TER)</th>
+                                <th>Differenz</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Start</td>
+                                <td>CHF 100'000</td>
+                                <td>CHF 100'000</td>
+                                <td>CHF 0</td>
+                            </tr>
+                            <tr>
+                                <td>10 Jahre</td>
+                                <td>CHF 148'024</td>
+                                <td>CHF 181'402</td>
+                                <td class="highlight">CHF 33'378</td>
+                            </tr>
+                            <tr>
+                                <td>20 Jahre</td>
+                                <td>CHF 219'112</td>
+                                <td>CHF 329'066</td>
+                                <td class="highlight">CHF 109'954</td>
+                            </tr>
+                            <tr>
+                                <td>30 Jahre</td>
+                                <td>CHF 324'340</td>
+                                <td>CHF 596'930</td>
+                                <td class="highlight">CHF 272'590</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="font-size: 0.875rem; color: var(--text-muted);">Annahme: 7% Bruttorendite p.a., gleiche Anlagesumme, Kosten als einziger Unterschied</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Anlagearten -->
+    <section id="arten">
+        <div class="section-header">
+            <h4>Kapitel 07</h4>
+            <h2>Anlagearten im Überblick</h2>
+            <p>Von risikoarm bis spekulativ – verstehe die verschiedenen Anlageklassen.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-sm">
+                <h4>Risikoarm</h4>
+                <h3>Obligationen</h3>
+                <p><span class="term">Festverzinsliche Wertpapiere<span class="tooltip">Anleihen mit festem Zinssatz – du leihst Geld an Staaten oder Unternehmen</span></span> mit planbaren Erträgen.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Rendite: 2-4%
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Volatilität: Niedrig
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-sm">
+                <h4>Ausgewogen</h4>
+                <h3>Aktien & ETFs</h3>
+                <p>Unternehmensanteile mit Wachstumspotential und <span class="term">Dividenden<span class="tooltip">Gewinnausschüttungen von Unternehmen an Aktionäre</span></span>.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Rendite: 5-10%
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Volatilität: Mittel-Hoch
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-sm">
+                <h4>Substanzwert</h4>
+                <h3>Immobilien</h3>
+                <p>Sachwerte mit Mieteinnahmen und potentieller Wertsteigerung.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Rendite: 3-6%
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Volatilität: Niedrig
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-sm">
+                <h4>Spekulativ</h4>
+                <h3>Rohstoffe & Crypto</h3>
+                <p>Hochvolatile Anlagen ohne regelmässige Erträge.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Rendite: Unvorhersehbar
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Volatilität: Sehr hoch
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-full">
+                <h3>Asset Allocation nach Alter</h3>
+                <p>Die <span class="term">Faustregel<span class="tooltip">100 minus Alter = Aktienquote in Prozent. Mit 30 also 70% Aktien, mit 60 noch 40%</span></span>: 100 minus Alter = empfohlene Aktienquote</p>
+                <div class="chart-container">
+                    <canvas id="allocationChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 8: P2P-Kredite -->
+    <section id="p2p">
+        <div class="section-header">
+            <h4>Kapitel 08</h4>
+            <h2>P2P-Kredite: Peer-to-Peer Lending</h2>
+            <p>Direkte Kreditvergabe von Privatperson zu Privatperson – höhere Renditen bei höherem Risiko.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-md">
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h3>Was sind P2P-Kredite?</h3>
+                <p>Bei <span class="term">P2P-Lending<span class="tooltip">Peer-to-Peer: Kreditvergabe zwischen Privatpersonen über Online-Plattformen, ohne klassische Bank als Vermittler</span></span> vermitteln Online-Plattformen Kredite zwischen Privatpersonen oder Kleinunternehmen.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Kreditnehmer erhalten günstigere Zinsen als bei Banken
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Investoren erhalten höhere Renditen als bei Sparkonten
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Plattform übernimmt Bonitätsprüfung und Inkasso
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Diversifikation durch viele kleine Kredite möglich
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-md">
+                <h3>Rendite-Potenzial</h3>
+                <p>P2P-Kredite bieten attraktive Zinsen, die deutlich über klassischen Sparanlagen liegen.</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Risikoklasse</th>
+                                <th>Zinssatz p.a.</th>
+                                <th>Ausfallrisiko</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A (Sehr gut)</td>
+                                <td class="highlight">4-6%</td>
+                                <td>~1-2%</td>
+                            </tr>
+                            <tr>
+                                <td>B (Gut)</td>
+                                <td class="highlight">6-9%</td>
+                                <td>~3-5%</td>
+                            </tr>
+                            <tr>
+                                <td>C (Mittel)</td>
+                                <td class="highlight">9-12%</td>
+                                <td>~6-10%</td>
+                            </tr>
+                            <tr>
+                                <td>D (Riskant)</td>
+                                <td class="highlight">12-18%</td>
+                                <td>~10-20%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Vor- und Nachteile von P2P-Krediten</h3>
+                <div class="comparison">
+                    <div class="comparison-item positive">
+                        <h5>Vorteile</h5>
+                        <ul class="feature-list" style="margin-top: 0;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Höhere Renditen als Sparbuch (5-12%)
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Monatliche Zins- und Tilgungszahlungen (Cashflow)
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Diversifikation ab CHF 10-25 pro Kredit möglich
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Unabhängig von Börsen-Volatilität
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Auto-Invest Funktionen verfügbar
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item negative">
+                        <h5>Nachteile & Risiken</h5>
+                        <ul class="feature-list" style="margin-top: 0;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Kein Einlagenschutz wie bei Banken
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Ausfallrisiko: Kreditnehmer können zahlungsunfähig werden
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Plattformrisiko: P2P-Plattform kann Konkurs gehen
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Liquidität: Kein schneller Ausstieg möglich (Laufzeiten)
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                                Länderrisiko: Oft osteuropäische Kredite
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Bekannte P2P-Plattformen</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Plattform</th>
+                                <th>Region</th>
+                                <th>Besonderheit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Mintos</strong></td>
+                                <td>Europa</td>
+                                <td>Grösste Plattform, Secondhand-Markt</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bondora</strong></td>
+                                <td>Baltikum</td>
+                                <td>Go & Grow (liquide Option)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Estateguru</strong></td>
+                                <td>Europa</td>
+                                <td>Immobilien-gesicherte Kredite</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Viventor</strong></td>
+                                <td>Europa</td>
+                                <td>Buyback-Garantie</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Swisspeers</strong></td>
+                                <td>Schweiz</td>
+                                <td>Schweizer KMU-Kredite</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Strategien für P2P-Investoren</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5>Konservativ: Nur beste Bonität</h5>
+                            <p>Nur A-Ratings, eventuell mit Rückkaufgarantie. Rendite: ~5-7%</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5>Ausgewogen: Gemischtes Portfolio</h5>
+                            <p>70% A-B Rating, 30% C-Rating. Breite Diversifikation. Rendite: ~8-10%</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5>Aggressiv: Höhere Risikoklassen</h5>
+                            <p>Auch D-Ratings, spekulative Kredite. Rendite: ~12-15%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Best Practices für P2P-Investments</h3>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Maximal 5-10% des Portfolios:</strong> P2P sollte nur ein kleiner Teil deiner Gesamtanlagen sein
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Breite Diversifikation:</strong> Mindestens 100-200 verschiedene Kredite, CHF 10-50 pro Kredit
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Mehrere Plattformen nutzen:</strong> Reduziert Plattformrisiko
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Auto-Invest nutzen:</strong> Automatische Reinvestition der Rückflüsse
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Ausfälle einkalkulieren:</strong> 2-5% Ausfallrate ist normal, auch bei guter Bonität
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Langfristig denken:</strong> Laufzeiten von 1-5 Jahren sind üblich
+                    </li>
+                </ul>
+                <div class="info-box" style="margin-top: 1.5rem;">
+                    <p><strong>Wichtig:</strong> P2P-Kredite sind keine sichere Anlage. Sie sollten nur mit Geld investieren, dessen Verlust du verkraften kannst. In Krisenzeiten (z.B. COVID-19) steigen Ausfallquoten massiv an.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 9: Risiko-Ertrags-Verhältnis -->
+    <section id="risiko">
+        <div class="section-header">
+            <h4>Kapitel 09</h4>
+            <h2>Risiko & Ertrag</h2>
+            <p>Mehr Rendite bedeutet immer mehr Risiko. Die Kunst liegt in der richtigen Balance.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-md">
+                <h3>Das Risiko-Ertrags-Verhältnis</h3>
+                <p>Im Finanzmarkt gibt es keine Free Lunch. Höhere erwartete Renditen kommen immer mit höherem Risiko.</p>
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3><span class="term">Diversifikation<span class="tooltip">Risikostreuung durch Investition in verschiedene Anlageklassen, Regionen und Branchen</span></span></h3>
+                <p>Die einzige "Free Lunch" in der Finanzwelt. Durch Streuung reduzierst du Risiko ohne Rendite zu opfern.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Nach Anlageklassen:</strong> Aktien, Obligationen, Immobilien
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Nach Regionen:</strong> Europa, USA, Emerging Markets
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Nach Branchen:</strong> Tech, Gesundheit, Finanzen, etc.
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Nach Zeit:</strong> <span class="term">Cost-Average-Effekt<span class="tooltip">Durch regelmässiges Investieren kaufst du bei tiefen Kursen mehr Anteile</span></span> durch regelmässiges Investieren
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-full">
+                <h3>Dein persönliches Risikoprofil</h3>
+                <p>Finde heraus, welche Strategie zu dir passt:</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Profil</th>
+                                <th>Aktien</th>
+                                <th>Obligationen</th>
+                                <th>Erwartete Rendite</th>
+                                <th>Max. Verlust (1 Jahr)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Konservativ</strong></td>
+                                <td>20%</td>
+                                <td>80%</td>
+                                <td>3-4%</td>
+                                <td>~-10%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ausgewogen</strong></td>
+                                <td>50%</td>
+                                <td>50%</td>
+                                <td>5-6%</td>
+                                <td>~-20%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Wachstum</strong></td>
+                                <td>80%</td>
+                                <td>20%</td>
+                                <td>7-8%</td>
+                                <td>~-35%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Aggressiv</strong></td>
+                                <td>100%</td>
+                                <td>0%</td>
+                                <td>8-10%</td>
+                                <td>~-50%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-box">
+                    <p><strong>Wichtig:</strong> Wähle nur ein Risikoprofil, bei dem du auch in Crash-Phasen ruhig schlafen kannst. Panikverkäufe zerstören mehr Rendite als eine konservativere Strategie.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 – Persönliche Finanzen meistern</p>
+        <p style="margin-top: 0.5rem; color: var(--text-muted);">Keine Anlageberatung. Nur für Bildungszwecke.</p>
+    </footer>
+
+    <!-- Settings Button -->
+    <button class="settings-fab" id="settingsBtn" aria-label="Einstellungen öffnen">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+    </button>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Persönliche Einstellungen</h3>
+                <p>Passe die Berechnungen an deine Situation an</p>
+            </div>
+            <div class="modal-body">
+                <div class="control-group">
+                    <label for="savingsRate">
+                        Sparkonto Zinssatz
+                        <span class="value-display" id="savingsRateDisplay">1.0%</span>
+                    </label>
+                    <input type="range" id="savingsRate" value="1.0" min="0" max="10" step="0.1">
+                    <div class="control-hint">Dein aktueller Sparzins (0-10% p.a.)</div>
+                </div>
+
+                <div class="control-group">
+                    <label for="savingsRateMonthly">
+                        Monatliche Sparrate
+                        <span class="value-display" id="savingsRateMonthlyDisplay">CHF 200</span>
+                    </label>
+                    <input type="range" id="savingsRateMonthly" value="200" min="0" max="2000" step="50">
+                    <div class="control-hint">Wie viel sparst/investierst du monatlich? (CHF 0-2000)</div>
+                </div>
+
+                <div class="control-group">
+                    <label for="currentAge">
+                        Dein Alter
+                        <span class="value-display" id="currentAgeDisplay">30 Jahre</span>
+                    </label>
+                    <input type="range" id="currentAge" value="30" min="18" max="65" step="1">
+                    <div class="control-hint">Dein aktuelles Alter (18-65 Jahre)</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeModal">Abbrechen</button>
+                <button class="btn btn-primary" id="saveSettings">Übernehmen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for charts
+        let compoundChart, lifestyleChart, allocationChart, riskChart;
+        let savingsRate = 1.0; // Default savings rate
+        let monthlySavings = 200; // Default monthly savings
+        let currentAge = 30; // Default age
+
+        // Calculation functions
+        function calculateCompoundInterest(principal, rate, years) {
+            return principal * Math.pow(1 + rate / 100, years);
+        }
+
+        function calculateSavingsGrowth(monthlyContribution, rate, years) {
+            const monthlyRate = rate / 100 / 12;
+            const months = years * 12;
+            if (monthlyRate === 0) {
+                return monthlyContribution * months;
+            }
+            return monthlyContribution * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+        }
+
+        // Modal Functions
+        function openModal() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function saveSettings() {
+            updateCharts();
+            closeModal();
+        }
+
+        // Update display values for range sliders
+        function updateRangeDisplays() {
+            const savingsRateInput = document.getElementById('savingsRate');
+            const savingsRateMonthlyInput = document.getElementById('savingsRateMonthly');
+            const currentAgeInput = document.getElementById('currentAge');
+
+            document.getElementById('savingsRateDisplay').textContent = `${parseFloat(savingsRateInput.value).toFixed(1)}%`;
+            document.getElementById('savingsRateMonthlyDisplay').textContent = `CHF ${savingsRateMonthlyInput.value}`;
+            document.getElementById('currentAgeDisplay').textContent = `${currentAgeInput.value} Jahre`;
+        }
+
+        // Scroll Animation for Cards
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Nav scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Chart.js Configuration
+        Chart.defaults.color = '#a1a1aa';
+        Chart.defaults.borderColor = '#27272a';
+        Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+        // Update all charts based on settings
+        function updateCharts() {
+            const savingsRateInput = document.getElementById('savingsRate');
+            const savingsRateMonthlyInput = document.getElementById('savingsRateMonthly');
+            const currentAgeInput = document.getElementById('currentAge');
+
+            savingsRate = parseFloat(savingsRateInput.value);
+            monthlySavings = parseFloat(savingsRateMonthlyInput.value);
+            currentAge = parseInt(currentAgeInput.value);
+
+            // Update text elements
+            document.getElementById('savingsRateText').textContent = `~${savingsRate}%`;
+            document.getElementById('savingsRateTable').textContent = `~${savingsRate}%`;
+
+            // Update compound example text
+            const investmentRate = 7;
+            const retirementAge = 65;
+            const earlyAge = 25;
+            const lateAge = 35;
+
+            const earlyTotal = Math.round(calculateSavingsGrowth(monthlySavings, investmentRate, retirementAge - earlyAge) / 1000);
+            const lateTotal = Math.round(calculateSavingsGrowth(monthlySavings, investmentRate, retirementAge - lateAge) / 1000);
+
+            document.getElementById('compoundExampleText').innerHTML =
+                `<strong>Beispiel:</strong> CHF ${monthlySavings}/Monat ab ${earlyAge} Jahren = CHF ${earlyTotal}'000 mit ${retirementAge}<br>
+                Dieselbe Summe ab ${lateAge} Jahren = nur CHF ${lateTotal}'000`;
+
+            // Update all charts
+            updateCompoundChart();
+            updateLifestyleChart();
+            updateAllocationChart();
+            updateRiskChart();
+        }
+
+        function updateCompoundChart() {
+            const principal = 10000;
+            const investmentRate = 7;
+
+            const investmentData = [5, 10, 15, 20, 25, 30].map(years =>
+                Math.round(calculateCompoundInterest(principal, investmentRate, years))
+            );
+
+            const savingsData = [5, 10, 15, 20, 25, 30].map(years =>
+                Math.round(calculateCompoundInterest(principal, savingsRate, years))
+            );
+
+            compoundChart.data.datasets[0].data = [principal, ...investmentData];
+            compoundChart.data.datasets[1].data = [principal, ...savingsData];
+            compoundChart.data.datasets[1].label = `Sparkonto (${savingsRate}%)`;
+            compoundChart.update();
+        }
+
+        function updateLifestyleChart() {
+            // Calculate savings trajectory with different savings rates
+            const ages = [25, 30, 35, 40, 45, 50, 55, 60, 65];
+            const highSavingsRate = monthlySavings * 1.5; // 30% savings rate example
+            const lowSavingsRate = monthlySavings * 0.5;  // 10% savings rate example
+            const investmentRate = 7;
+
+            const highSavingsData = ages.map(age => {
+                if (age < currentAge) return 0;
+                const years = age - currentAge;
+                return Math.round(calculateSavingsGrowth(highSavingsRate, investmentRate, years));
+            });
+
+            const lowSavingsData = ages.map(age => {
+                if (age < currentAge) return 0;
+                const years = age - currentAge;
+                return Math.round(calculateSavingsGrowth(lowSavingsRate, investmentRate, years));
+            });
+
+            lifestyleChart.data.datasets[0].data = highSavingsData;
+            lifestyleChart.data.datasets[0].label = `Hohe Sparrate (CHF ${Math.round(highSavingsRate)}/Mt)`;
+            lifestyleChart.data.datasets[1].data = lowSavingsData;
+            lifestyleChart.data.datasets[1].label = `Niedrige Sparrate (CHF ${Math.round(lowSavingsRate)}/Mt)`;
+            lifestyleChart.update();
+        }
+
+        function updateAllocationChart() {
+            // Update asset allocation based on age
+            const ages = [25, 35, 45, 55, 65];
+            const stockAllocation = ages.map(age => {
+                if (age === currentAge) {
+                    return Math.max(100 - currentAge, 20); // Highlighted current age
+                }
+                return Math.max(100 - age, 20); // Rule: 100 - age = stock %
+            });
+
+            const bondAllocation = stockAllocation.map(stocks => 100 - stocks);
+
+            allocationChart.data.datasets[0].data = stockAllocation;
+            allocationChart.data.datasets[1].data = bondAllocation;
+            allocationChart.update();
+        }
+
+        function updateRiskChart() {
+            riskChart.data.datasets[0].data = [
+                { x: 0.5, y: savingsRate, label: 'Sparkonto' },
+                { x: 3, y: 3, label: 'Obligationen' },
+                { x: 5, y: 5, label: 'Immobilien' },
+                { x: 9, y: 8, label: 'P2P-Kredite' },
+                { x: 12, y: 7, label: 'Aktien' },
+                { x: 8, y: 4, label: 'Gold' },
+                { x: 30, y: 15, label: 'Crypto' }
+            ];
+            riskChart.update();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modal controls
+            document.getElementById('settingsBtn').addEventListener('click', openModal);
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('saveSettings').addEventListener('click', saveSettings);
+
+            // Close modal when clicking overlay
+            document.getElementById('settingsModal').addEventListener('click', (e) => {
+                if (e.target.id === 'settingsModal') {
+                    closeModal();
+                }
+            });
+
+            // Range slider live updates
+            const savingsRateInput = document.getElementById('savingsRate');
+            const savingsRateMonthlyInput = document.getElementById('savingsRateMonthly');
+            const currentAgeInput = document.getElementById('currentAge');
+
+            savingsRateInput.addEventListener('input', updateRangeDisplays);
+            savingsRateMonthlyInput.addEventListener('input', updateRangeDisplays);
+            currentAgeInput.addEventListener('input', updateRangeDisplays);
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        });
+
+        // Compound Interest Chart
+        const compoundCtx = document.getElementById('compoundChart').getContext('2d');
+        compoundChart = new Chart(compoundCtx, {
+            type: 'line',
+            data: {
+                labels: ['Start', '5', '10', '15', '20', '25', '30 Jahre'],
+                datasets: [{
+                    label: 'Mit Zinseszins (7%)',
+                    data: [10000, 14026, 19672, 27590, 38697, 54274, 76123],
+                    borderColor: '#d4a574',
+                    backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Sparkonto (1%)',
+                    data: [10000, 10512, 11046, 11609, 12202, 12824, 13478],
+                    borderColor: '#71717a',
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 20 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#1f1f23' },
+                        ticks: {
+                            callback: value => 'CHF ' + value.toLocaleString()
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Lifestyle Chart
+        const lifestyleCtx = document.getElementById('lifestyleChart').getContext('2d');
+        lifestyleChart = new Chart(lifestyleCtx, {
+            type: 'line',
+            data: {
+                labels: ['25', '30', '35', '40', '45', '50', '55', '60', '65 Jahre'],
+                datasets: [{
+                    label: 'Hohe Sparrate (30%)',
+                    data: [0, 45000, 115000, 220000, 380000, 620000, 980000, 1500000, 2200000],
+                    borderColor: '#4ade80',
+                    backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Niedrige Sparrate (10%)',
+                    data: [0, 15000, 40000, 75000, 130000, 210000, 330000, 500000, 720000],
+                    borderColor: '#f87171',
+                    backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 20 }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#1f1f23' },
+                        ticks: {
+                            callback: value => 'CHF ' + (value / 1000000).toFixed(1) + 'M'
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Asset Allocation Chart
+        const allocationCtx = document.getElementById('allocationChart').getContext('2d');
+        allocationChart = new Chart(allocationCtx, {
+            type: 'bar',
+            data: {
+                labels: ['25 Jahre', '35 Jahre', '45 Jahre', '55 Jahre', '65 Jahre'],
+                datasets: [{
+                    label: 'Aktien',
+                    data: [75, 65, 55, 45, 35],
+                    backgroundColor: '#d4a574'
+                }, {
+                    label: 'Obligationen',
+                    data: [25, 35, 45, 55, 65],
+                    backgroundColor: '#52525b'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 20 }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: { display: false }
+                    },
+                    y: {
+                        stacked: true,
+                        max: 100,
+                        grid: { color: '#1f1f23' },
+                        ticks: {
+                            callback: value => value + '%'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Risk-Return Chart
+        const riskCtx = document.getElementById('riskChart').getContext('2d');
+        riskChart = new Chart(riskCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Anlageklassen',
+                    data: [
+                        { x: 0.5, y: 1, label: 'Sparkonto' },
+                        { x: 3, y: 3, label: 'Obligationen' },
+                        { x: 5, y: 5, label: 'Immobilien' },
+                        { x: 9, y: 8, label: 'P2P-Kredite' },
+                        { x: 12, y: 7, label: 'Aktien' },
+                        { x: 8, y: 4, label: 'Gold' },
+                        { x: 30, y: 15, label: 'Crypto' }
+                    ],
+                    backgroundColor: '#d4a574',
+                    pointRadius: 10,
+                    pointHoverRadius: 14
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: context => {
+                                const point = context.raw;
+                                return `${point.label}: Risiko ${point.x}%, Rendite ${point.y}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Risiko (Volatilität %)',
+                            color: '#a1a1aa'
+                        },
+                        grid: { color: '#1f1f23' },
+                        min: 0,
+                        max: 35
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Erwartete Rendite (%)',
+                            color: '#a1a1aa'
+                        },
+                        grid: { color: '#1f1f23' },
+                        min: 0,
+                        max: 20
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
