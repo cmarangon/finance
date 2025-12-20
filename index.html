@@ -141,6 +141,11 @@
             background: var(--bg-hover);
         }
 
+        nav a.active {
+            color: var(--accent);
+            background: var(--accent-subtle);
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -752,6 +757,68 @@
             margin-left: 0.5rem;
         }
 
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 5rem;
+            right: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1001;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-medium);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-medium);
+            z-index: 998;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+        }
+
+        .scroll-top svg {
+            color: var(--text-secondary);
+        }
+
+        .scroll-top:hover svg {
+            color: var(--accent);
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -816,6 +883,21 @@
                 height: 56px;
             }
 
+            .scroll-top {
+                bottom: 1.5rem;
+                left: 1.5rem;
+                width: 46px;
+                height: 46px;
+            }
+
+            .toast {
+                bottom: 4rem;
+                right: 1rem;
+                left: 1rem;
+                width: auto;
+                text-align: center;
+            }
+
             .modal-overlay {
                 padding: 1rem;
             }
@@ -833,6 +915,8 @@
             <li><a href="#lifestyle">Lifestyle</a></li>
             <li><a href="#schulden">Schulden</a></li>
             <li><a href="#notgroschen">Notgroschen</a></li>
+            <li><a href="#zinswueste">Zinswüste</a></li>
+            <li><a href="#vorsorge">Vorsorge</a></li>
             <li><a href="#investieren">Investieren</a></li>
             <li><a href="#arten">Anlagearten</a></li>
             <li><a href="#p2p">P2P-Kredite</a></li>
@@ -1106,10 +1190,16 @@
                                 <td>Automatische Kategorisierung (nur USA)</td>
                             </tr>
                             <tr>
-                                <td><strong>Neon/Yuh</strong></td>
+                                <td><strong>Yuh</strong></td>
                                 <td>Banking App</td>
                                 <td>Gratis</td>
-                                <td>Schweizer Neobanken mit Budget-Features</td>
+                                <td>Neobank mit Budget-Features</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Revolut</strong></td>
+                                <td>Banking App</td>
+                                <td>Gratis (Basic)</td>
+                                <td>Kategorisierung, Analytics, Multi-Währung</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1471,24 +1561,24 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Sparkonto</td>
+                                <td>Sparkonto (täglich verfügbar)</td>
                                 <td>Sofort</td>
                                 <td>Sehr hoch</td>
                                 <td id="savingsRateTable">~1%</td>
                                 <td class="highlight">Ideal</td>
                             </tr>
                             <tr>
-                                <td>Tagesgeld</td>
+                                <td>Privatkonto mit Zins</td>
                                 <td>Sofort</td>
                                 <td>Sehr hoch</td>
-                                <td id="tagesgeldRateTable">~1-2%</td>
+                                <td id="tagesgeldRateTable">~0.5-1.5%</td>
                                 <td class="highlight">Sehr gut</td>
                             </tr>
                             <tr>
-                                <td>Festgeld</td>
-                                <td>Nach Laufzeit</td>
+                                <td>Festgeldkonto (Terminguthaben)</td>
+                                <td>Nach Laufzeit (3-12 Monate)</td>
                                 <td>Sehr hoch</td>
-                                <td>~2-3%</td>
+                                <td>~1.5-2.5%</td>
                                 <td>Nur für Überschuss</td>
                             </tr>
                             <tr>
@@ -1505,10 +1595,511 @@
         </div>
     </section>
 
-    <!-- Section 6: Investieren Grundlagen -->
-    <section id="investieren">
+    <!-- Section 6: Die Zinswüste -->
+    <section id="zinswueste">
         <div class="section-header">
             <h4>Kapitel 06</h4>
+            <h2>Die Zinswüste</h2>
+            <p>Warum dein Geld auf dem Sparkonto jeden Tag an Wert verliert – und was du dagegen tun kannst.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-sm">
+                <div class="stat">
+                    <div class="stat-value" style="color: var(--danger);">0.00%</div>
+                    <div class="stat-label">Durchschnittszins der grossen Banken</div>
+                </div>
+            </div>
+
+            <div class="card card-sm">
+                <div class="stat">
+                    <div class="stat-value" style="color: var(--danger);">-2%</div>
+                    <div class="stat-label">Reale Rendite (nach Inflation)</div>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Das Problem: Schleichender Kaufkraftverlust</h3>
+                <p>Die meisten grossen Banken bieten auf ihren Sparkonten praktisch keine Zinsen mehr. Gleichzeitig liegt die Inflation bei etwa 2% pro Jahr. Das bedeutet: <strong>Dein Geld verliert jedes Jahr an Kaufkraft – auch wenn der nominale Betrag gleich bleibt.</strong></p>
+
+                <div class="info-box" style="margin-top: 1.5rem; background: rgba(248, 113, 113, 0.1); border-color: var(--danger);">
+                    <p><strong>Konkret:</strong> CHF 10'000 auf einem Sparkonto mit 0% Zins haben nach 10 Jahren bei 2% Inflation nur noch die Kaufkraft von ca. CHF 8'200. Du hast real CHF 1'800 verloren – ohne dass du es merkst!</p>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Historischer Vergleich</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Zeitraum</th>
+                                <th>Durchschnittszins</th>
+                                <th>Inflation</th>
+                                <th>Reale Rendite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: rgba(134, 239, 172, 0.1);">
+                                <td>1990-2000</td>
+                                <td style="color: var(--success);">~4.0%</td>
+                                <td>~2.5%</td>
+                                <td style="color: var(--success);">+1.5%</td>
+                            </tr>
+                            <tr style="background: rgba(134, 239, 172, 0.05);">
+                                <td>2000-2010</td>
+                                <td style="color: var(--success);">~2.0%</td>
+                                <td>~1.0%</td>
+                                <td style="color: var(--success);">+1.0%</td>
+                            </tr>
+                            <tr style="background: rgba(251, 191, 36, 0.1);">
+                                <td>2010-2020</td>
+                                <td style="color: var(--warning);">~0.5%</td>
+                                <td>~0.5%</td>
+                                <td>±0.0%</td>
+                            </tr>
+                            <tr style="background: rgba(248, 113, 113, 0.1);">
+                                <td>2020-2025</td>
+                                <td style="color: var(--danger);">~0.0%</td>
+                                <td>~2.0%</td>
+                                <td style="color: var(--danger);">-2.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Früher konnte man mit einem Sparkonto sogar Geld verdienen. Heute verlierst du garantiert Kaufkraft.</p>
+            </div>
+
+            <div class="card card-md">
+                <h3>Warum ist das so?</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5>Negativzinspolitik der Nationalbank</h5>
+                            <p>Die Nationalbank hatte jahrelang Negativzinsen, um den Franken zu schwächen. Die Banken gaben diese nicht an Privatkunden weiter.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5>Hohe Gewinnmargen</h5>
+                            <p>Banken verdienen ihr Geld mit dem Zinsunterschied: Sie zahlen dir 0%, verleihen dein Geld aber zu 5% Hypothekenzins weiter.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5>Mangelnder Wettbewerb</h5>
+                            <p>Viele Menschen wechseln ihre Bank nicht, auch wenn die Zinsen miserabel sind. Ohne Druck bleiben die Zinsen niedrig.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Der reale Verlust: Eine Rechnung</h3>
+                <div class="chart-container">
+                    <canvas id="interestLossChart"></canvas>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Die Grafik zeigt, wie sich CHF 10'000 über 20 Jahre entwickeln – bei 0% Zins vs. 0.50% Zins, jeweils inflationsbereinigt (2% Inflation angenommen).</p>
+            </div>
+
+            <div class="card card-full">
+                <h3>Was bedeutet das konkret für dich?</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Anfangsbetrag</th>
+                                <th>Nach 10 Jahren nominal</th>
+                                <th>Nach 10 Jahren real*</th>
+                                <th>Verlust</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CHF 5'000</td>
+                                <td>CHF 5'000</td>
+                                <td style="color: var(--danger);">CHF 4'100</td>
+                                <td style="color: var(--danger);">-CHF 900</td>
+                            </tr>
+                            <tr>
+                                <td>CHF 10'000</td>
+                                <td>CHF 10'000</td>
+                                <td style="color: var(--danger);">CHF 8'200</td>
+                                <td style="color: var(--danger);">-CHF 1'800</td>
+                            </tr>
+                            <tr>
+                                <td>CHF 25'000</td>
+                                <td>CHF 25'000</td>
+                                <td style="color: var(--danger);">CHF 20'500</td>
+                                <td style="color: var(--danger);">-CHF 4'500</td>
+                            </tr>
+                            <tr>
+                                <td>CHF 50'000</td>
+                                <td>CHF 50'000</td>
+                                <td style="color: var(--danger);">CHF 41'000</td>
+                                <td style="color: var(--danger);">-CHF 9'000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">* Realer Wert = inflationsbereinigt, also was du tatsächlich noch kaufen kannst. Bei 0% Zins und 2% Inflation.</p>
+            </div>
+
+            <div class="card card-full">
+                <h3>Banken im Vergleich</h3>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1rem;">
+                    <strong>Letzte Aktualisierung:</strong> Dezember 2025
+                </p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bank</th>
+                                <th>Kontotyp</th>
+                                <th>Zinssatz p.a.</th>
+                                <th>Besonderheiten</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: rgba(248, 113, 113, 0.1);">
+                                <td><strong><a href="https://www.yuh.com/de/pricing/" target="_blank" style="color: var(--accent);">Yuh</a></strong></td>
+                                <td>Sparkonto</td>
+                                <td style="color: var(--danger); font-weight: 700;">0.00%* ⚠️</td>
+                                <td>Keine Zinsen! Nur für Investment-Features geeignet</td>
+                            </tr>
+                            <tr style="background: rgba(248, 113, 113, 0.1);">
+                                <td><strong><a href="https://www.postfinance.ch/de/privat/zahlen-sparen/konten/sparkonto.html" target="_blank" style="color: var(--accent);">Postfinance</a></strong></td>
+                                <td>e-Sparkonto</td>
+                                <td style="color: var(--danger); font-weight: 700;">0.00%* ⚠️</td>
+                                <td>Staatlich, sehr sicher - aber keine Zinsen!</td>
+                            </tr>
+                            <tr style="background: rgba(248, 113, 113, 0.1);">
+                                <td><strong><a href="https://www.raiffeisen.ch/grauholz/de/privatkunden/konten-und-bezahlen/sparkonto.html#conditionsitem_78697655458525" target="_blank" style="color: var(--accent);">Raiffeisen</a></strong></td>
+                                <td>Sparkonto</td>
+                                <td style="color: var(--danger); font-weight: 700;">0.025%*<br>(0.05% für Mitglieder) ⚠️</td>
+                                <td>Genossenschaftsbank - extrem niedrige Zinsen!</td>
+                            </tr>
+                            <tr style="background: rgba(248, 113, 113, 0.1);">
+                                <td><strong><a href="https://www.zkb.ch/de/private/konten-karten/sparkonten/sparkonto.html" target="_blank" style="color: var(--accent);">ZKB</a></strong></td>
+                                <td>Sparkonto</td>
+                                <td style="color: var(--danger); font-weight: 700;">0.05%* (bis CHF 25k)<br>danach 0% ⚠️</td>
+                                <td>Staatsgarantie - extrem niedrige Zinsen!</td>
+                            </tr>
+                            <tr style="background: rgba(248, 113, 113, 0.1);">
+                                <td><strong><a href="https://www.ubs.com/ch/de/services/accounts-and-cards/interest-rates-privates.html" target="_blank" style="color: var(--accent);">UBS</a></strong></td>
+                                <td>Sparkonto</td>
+                                <td style="color: var(--danger); font-weight: 700;">0.05%* (bis CHF 50k)<br>0.01% (darüber) ⚠️</td>
+                                <td>Grossbank - extrem niedrige Zinsen + Gebühren!</td>
+                            </tr>
+                            <tr>
+                                <td><strong><a href="https://www.abs.ch/de/konditionen-fuer-privatpersonen#sparkonto" target="_blank" style="color: var(--accent);">Alternative Bank</a></strong></td>
+                                <td>Sparkonto</td>
+                                <td class="highlight">0.50%*</td>
+                                <td>Nachhaltig, ethische Investments - beste Zinsen!</td>
+                            </tr>
+                            <tr style="background: rgba(248, 113, 113, 0.1);">
+                                <td><strong><a href="https://www.bekb.ch/de/privatkunden/sparen-und-vorsorgen" target="_blank" style="color: var(--accent);">BEKB</a></strong></td>
+                                <td>Sparkonto</td>
+                                <td style="color: var(--danger); font-weight: 700;">0.05%* (bis CHF 50k)<br>danach 0% ⚠️</td>
+                                <td>Staatsgarantie - extrem niedrige Zinsen!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-box" style="margin-top: 1.5rem; background: rgba(248, 113, 113, 0.1); border-color: var(--danger);">
+                    <p><strong>⚠️ Warnung:</strong> Viele Banken zahlen auf Sparkonten nur noch minimale oder gar keine Zinsen! Bei 2% Inflation verlierst du mit 0% Zins jährlich Kaufkraft. Vergleiche unbedingt die Konditionen verschiedener Banken!</p>
+                </div>
+                <div class="info-box" style="margin-top: 1rem;">
+                    <p><strong>* Hinweis:</strong> Zinssätze ändern sich regelmässig. Die angegebenen Werte sind Richtwerte (Stand Dezember 2025) und können je nach Bank und Kontosaldo variieren. Klicke auf die Banknamen für aktuelle Konditionen!</p>
+                </div>
+                <div class="info-box" style="margin-top: 1rem;">
+                    <p><strong>Tipp:</strong> Einige Banken haben Staatsgarantie – besonders sicher für grosse Beträge. Vergleiche aber unbedingt die Zinsen, da diese stark variieren können (0% bis 0.75%).</p>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Was kannst du tun?</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5>Bank wechseln</h5>
+                            <p>Wechsle zu einer Bank mit höheren Zinsen (siehe <a href="#notgroschen" style="color: var(--accent);">Kapitel 05</a>). Alternative Bank bietet 0.50% statt 0.00%.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5>Nur Notgroschen auf Sparkonto</h5>
+                            <p>Halte nur 3-6 Monatsausgaben als Notgroschen liquide. Alles darüber sollte arbeiten.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5>Investieren statt Sparen</h5>
+                            <p>Langfristiges Geld gehört in Aktien/ETFs (siehe <a href="#investieren" style="color: var(--accent);">Kapitel 08</a>). Historisch ~7% Rendite p.a.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h5>Säule 3a nutzen</h5>
+                            <p>Steuervorteil + bessere Rendite durch Wertschriftenlösungen (siehe <a href="#vorsorge" style="color: var(--accent);">Kapitel 07</a>).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-full" style="background: linear-gradient(135deg, var(--card-bg) 0%, rgba(212, 175, 55, 0.1) 100%); border: 2px solid var(--accent);">
+                <h3 style="color: var(--accent);">Die Kernbotschaft</h3>
+                <p style="font-size: 1.1rem; line-height: 1.6;">Dein Geld auf einem 0%-Sparkonto zu lassen ist keine sichere, konservative Strategie – es ist die Garantie, dass du jedes Jahr Kaufkraft verlierst. <strong>Echte finanzielle Sicherheit entsteht nicht durch Nichtstun, sondern durch kluge Allokation deines Vermögens.</strong></p>
+                <p style="margin-top: 1rem;">Wechsle zu einer Bank mit besseren Konditionen, halte nur den Notgroschen liquide, und investiere den Rest langfristig. So schützt du dein Geld vor der Inflation und baust echtes Vermögen auf.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Vorsorge -->
+    <section id="vorsorge">
+        <div class="section-header">
+            <h4>Kapitel 07</h4>
+            <h2>Vorsorgesystem</h2>
+            <p>Das 3-Säulen-Prinzip – die Basis deiner Altersvorsorge und wichtige Steueroptimierungen.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="card card-full">
+                <h3>Die 3 Säulen der Vorsorge</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Säule</th>
+                                <th>Zweck</th>
+                                <th>Obligatorisch</th>
+                                <th>Steuerlich</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. Säule (AHV/IV)</strong></td>
+                                <td>Existenzsicherung im Alter</td>
+                                <td class="highlight">Ja</td>
+                                <td>Pflichtbeiträge</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Säule (BVG)</strong></td>
+                                <td>Gewohnter Lebensstandard</td>
+                                <td class="highlight">Ab CHF 22'050/Jahr</td>
+                                <td>Pflichtbeiträge</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Säule (3a/3b)</strong></td>
+                                <td>Zusätzliche private Vorsorge</td>
+                                <td>Freiwillig</td>
+                                <td class="highlight">Steuerlich absetzbar (3a)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <div class="card-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                </div>
+                <h3>Säule 3a: Gebundene Vorsorge</h3>
+                <p>Die steuerlich begünstigte Altersvorsorge mit maximaler Flexibilität.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Max. Einzahlung 2025:</strong> CHF 7'258 (Angestellte) oder CHF 36'288 (Selbständige ohne PK)
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Steuerabzug:</strong> Vom steuerbaren Einkommen absetzbar (CHF 1'500-3'000 Ersparnis, regional unterschiedlich)
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Bezug:</strong> 5 Jahre vor Pensionierung bis 5 Jahre danach
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Vorbezug möglich:</strong> Wohneigentum, Selbständigkeit, Auswanderung
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-md">
+                <h3>3a Sparkonto vs. 3a Wertschriften</h3>
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h5 style="color: var(--text-primary);">3a Sparkonto</h5>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Konservativ, garantiert</p>
+                        <ul class="feature-list" style="margin-top: 0.5rem;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Rendite: ~0.5-1.5%
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Risiko: Kein Verlustrisiko
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Geeignet für: Kurz vor Pension
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item positive">
+                        <h5 style="color: var(--text-primary);">3a Wertschriften</h5>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Langfristig, höheres Potenzial</p>
+                        <ul class="feature-list" style="margin-top: 0.5rem;">
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Rendite: ~5-7% (historisch)
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Risiko: Kursschwankungen
+                            </li>
+                            <li>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                Geeignet für: 10+ Jahre Horizont
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-md">
+                <h3>Pensionskasse (2. Säule) optimieren</h3>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Einkauf in die PK:</strong> Steuern sparen durch freiwillige Einkäufe (steuerlich absetzbar)
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Sperrfrist beachten:</strong> 3 Jahre Wartefrist bei Kapitalbezug nach Einkauf
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>WEF-Vorbezug:</strong> Für Wohneigentum bis 50 (danach nur noch Amortisation)
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        <strong>Rente vs. Kapital:</strong> Bei Pension entscheiden (Steuern berücksichtigen!)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-md">
+                <h3>Säule 3b: Freie Vorsorge</h3>
+                <p>Flexible Anlageformen ohne steuerliche Abzugsmöglichkeit, aber ohne Bezugsbeschränkungen.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Normale Wertschriftendepots (ETFs, Aktien)
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Lebensversicherungen mit Sparanteil
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Immobilien (selbstbewohnt oder vermietet)
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-full">
+                <h3>Optimale Vorsorgestrategie nach Alter</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5>20-30 Jahre: Aufbauphase</h5>
+                            <p>Säule 3a mit Wertschriften starten (langer Zeithorizont). Notgroschen aufbauen. PK-Einkäufe noch nicht prioritär.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5>30-45 Jahre: Optimierungsphase</h5>
+                            <p>Säule 3a maximal ausschöpfen. Erste PK-Einkäufe prüfen. Evtl. Wohneigentum mit WEF-Vorbezug.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5>45-55 Jahre: Konsolidierung</h5>
+                            <p>Strategische PK-Einkäufe zur Steuersenkung. 3a weiter maximal nutzen. Aktienquote langsam reduzieren.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h5>55-65 Jahre: Bezugsstrategie</h5>
+                            <p>Gestaffelte 3a-Bezüge planen (Steuerprogression). Rente vs. Kapital bei PK entscheiden. Konservative Anlagen.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-full">
+                <h3>Steueroptimierung mit Säule 3a – Rechenbeispiel</h3>
+                <div class="info-box">
+                    <p><strong>Situation:</strong> Ledige Person, CHF 100'000 Bruttoeinkommen</p>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Ohne 3a</th>
+                                <th>Mit 3a (CHF 7'258)</th>
+                                <th>Differenz</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Steuerbares Einkommen</td>
+                                <td>CHF 100'000</td>
+                                <td>CHF 92'742</td>
+                                <td class="highlight">-CHF 7'258</td>
+                            </tr>
+                            <tr>
+                                <td>Geschätzte Steuern</td>
+                                <td>~CHF 20'000</td>
+                                <td>~CHF 17'800</td>
+                                <td class="highlight">-CHF 2'200</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Effektive Kosten 3a</strong></td>
+                                <td>-</td>
+                                <td colspan="2" class="highlight"><strong>CHF 5'058 (statt CHF 7'258!)</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-box" style="margin-top: 1.5rem;">
+                    <p><strong>Fazit:</strong> Dank Steuerersparnis kostet die 3a-Einzahlung effektiv nur ~70% des eingezahlten Betrags. Die restlichen 30% spart der Staat für dich!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 8: Investieren Grundlagen -->
+    <section id="investieren">
+        <div class="section-header">
+            <h4>Kapitel 08</h4>
             <h2>Investieren Grundlagen</h2>
             <p>Warum investieren wichtig ist und wie du langfristig Vermögen aufbaust.</p>
         </div>
@@ -1599,10 +2190,10 @@
         </div>
     </section>
 
-    <!-- Section 7: Anlagearten -->
+    <!-- Section 9: Anlagearten -->
     <section id="arten">
         <div class="section-header">
-            <h4>Kapitel 07</h4>
+            <h4>Kapitel 09</h4>
             <h2>Anlagearten im Überblick</h2>
             <p>Von risikoarm bis spekulativ – verstehe die verschiedenen Anlageklassen.</p>
         </div>
@@ -1657,6 +2248,26 @@
             </div>
 
             <div class="card card-sm">
+                <h4>Alternativ</h4>
+                <h3>P2P-Kredite</h3>
+                <p>Direktes Verleihen an Privatpersonen über Online-Plattformen.</p>
+                <ul class="feature-list">
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Rendite: 5-12%
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Volatilität: Mittel-Hoch
+                    </li>
+                    <li>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                        Risiko: Ausfallrisiko
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card card-sm">
                 <h4>Spekulativ</h4>
                 <h3>Rohstoffe & Crypto</h3>
                 <p>Hochvolatile Anlagen ohne regelmässige Erträge.</p>
@@ -1682,10 +2293,10 @@
         </div>
     </section>
 
-    <!-- Section 8: P2P-Kredite -->
+    <!-- Section 10: P2P-Kredite -->
     <section id="p2p">
         <div class="section-header">
-            <h4>Kapitel 08</h4>
+            <h4>Kapitel 10</h4>
             <h2>P2P-Kredite: Peer-to-Peer Lending</h2>
             <p>Direkte Kreditvergabe von Privatperson zu Privatperson – höhere Renditen bei höherem Risiko.</p>
         </div>
@@ -1849,8 +2460,8 @@
                             </tr>
                             <tr>
                                 <td><strong>Swisspeers</strong></td>
-                                <td>Schweiz</td>
-                                <td>Schweizer KMU-Kredite</td>
+                                <td>Lokal</td>
+                                <td>KMU-Kredite</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1919,10 +2530,10 @@
         </div>
     </section>
 
-    <!-- Section 9: Risiko-Ertrags-Verhältnis -->
+    <!-- Section 11: Risiko-Ertrags-Verhältnis -->
     <section id="risiko">
         <div class="section-header">
-            <h4>Kapitel 09</h4>
+            <h4>Kapitel 11</h4>
             <h2>Risiko & Ertrag</h2>
             <p>Mehr Rendite bedeutet immer mehr Risiko. Die Kunst liegt in der richtigen Balance.</p>
         </div>
@@ -2018,6 +2629,13 @@
         <p style="margin-top: 0.5rem; color: var(--text-muted);">Keine Anlageberatung. Nur für Bildungszwecke.</p>
     </footer>
 
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTopBtn" aria-label="Zurück nach oben">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
+
     <!-- Settings Button -->
     <button class="settings-fab" id="settingsBtn" aria-label="Einstellungen öffnen">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2025,6 +2643,9 @@
             <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
         </svg>
     </button>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
 
     <!-- Settings Modal -->
     <div class="modal-overlay" id="settingsModal">
@@ -2070,10 +2691,30 @@
 
     <script>
         // Global variables for charts
-        let compoundChart, lifestyleChart, allocationChart, riskChart;
-        let savingsRate = 1.0; // Default savings rate
-        let monthlySavings = 200; // Default monthly savings
-        let currentAge = 30; // Default age
+        let compoundChart, lifestyleChart, allocationChart, riskChart, interestLossChart;
+
+        // Load settings from localStorage or use defaults
+        function loadSettings() {
+            const saved = localStorage.getItem('financeSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                return {
+                    savingsRate: settings.savingsRate || 1.0,
+                    monthlySavings: settings.monthlySavings || 200,
+                    currentAge: settings.currentAge || 30
+                };
+            }
+            return {
+                savingsRate: 1.0,
+                monthlySavings: 200,
+                currentAge: 30
+            };
+        }
+
+        const settings = loadSettings();
+        let savingsRate = settings.savingsRate;
+        let monthlySavings = settings.monthlySavings;
+        let currentAge = settings.currentAge;
 
         // Calculation functions
         function calculateCompoundInterest(principal, rate, years) {
@@ -2091,6 +2732,11 @@
 
         // Modal Functions
         function openModal() {
+            // Set current values in modal
+            document.getElementById('savingsRate').value = savingsRate;
+            document.getElementById('savingsRateMonthly').value = monthlySavings;
+            document.getElementById('currentAge').value = currentAge;
+            updateRangeDisplays();
             document.getElementById('settingsModal').classList.add('active');
         }
 
@@ -2098,9 +2744,22 @@
             document.getElementById('settingsModal').classList.remove('active');
         }
 
+        function saveSettingsToStorage() {
+            const settingsData = {
+                savingsRate: savingsRate,
+                monthlySavings: monthlySavings,
+                currentAge: currentAge
+            };
+            localStorage.setItem('financeSettings', JSON.stringify(settingsData));
+        }
+
         function saveSettings() {
             updateCharts();
+            saveSettingsToStorage();
             closeModal();
+
+            // Show success feedback
+            showToast('Einstellungen gespeichert!');
         }
 
         // Update display values for range sliders
@@ -2112,6 +2771,57 @@
             document.getElementById('savingsRateDisplay').textContent = `${parseFloat(savingsRateInput.value).toFixed(1)}%`;
             document.getElementById('savingsRateMonthlyDisplay').textContent = `CHF ${savingsRateMonthlyInput.value}`;
             document.getElementById('currentAgeDisplay').textContent = `${currentAgeInput.value} Jahre`;
+        }
+
+        // Toast notification
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // Scroll to top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide scroll to top button
+        function handleScrollButtons() {
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        }
+
+        // Active navigation state
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('nav a');
+
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
         }
 
         // Scroll Animation for Cards
@@ -2143,6 +2853,10 @@
             } else {
                 navbar.classList.remove('scrolled');
             }
+
+            // Update active nav and scroll buttons
+            updateActiveNav();
+            handleScrollButtons();
         });
 
         // Chart.js Configuration
@@ -2204,23 +2918,37 @@
 
         function updateLifestyleChart() {
             // Calculate savings trajectory with different savings rates
-            const ages = [25, 30, 35, 40, 45, 50, 55, 60, 65];
+            // Dynamically generate age labels based on current age
+            const retirementAge = 65;
+            const startAge = Math.max(currentAge, 25);
+            const ageStep = 5;
+
+            const ages = [];
+            for (let age = startAge; age <= retirementAge; age += ageStep) {
+                ages.push(age);
+            }
+            // Make sure 65 is included
+            if (ages[ages.length - 1] !== retirementAge) {
+                ages.push(retirementAge);
+            }
+
             const highSavingsRate = monthlySavings * 1.5; // 30% savings rate example
             const lowSavingsRate = monthlySavings * 0.5;  // 10% savings rate example
             const investmentRate = 7;
 
             const highSavingsData = ages.map(age => {
-                if (age < currentAge) return 0;
                 const years = age - currentAge;
+                if (years < 0) return 0;
                 return Math.round(calculateSavingsGrowth(highSavingsRate, investmentRate, years));
             });
 
             const lowSavingsData = ages.map(age => {
-                if (age < currentAge) return 0;
                 const years = age - currentAge;
+                if (years < 0) return 0;
                 return Math.round(calculateSavingsGrowth(lowSavingsRate, investmentRate, years));
             });
 
+            lifestyleChart.data.labels = ages.map(age => age === retirementAge ? `${age} Jahre` : `${age}`);
             lifestyleChart.data.datasets[0].data = highSavingsData;
             lifestyleChart.data.datasets[0].label = `Hohe Sparrate (CHF ${Math.round(highSavingsRate)}/Mt)`;
             lifestyleChart.data.datasets[1].data = lowSavingsData;
@@ -2230,16 +2958,35 @@
 
         function updateAllocationChart() {
             // Update asset allocation based on age
-            const ages = [25, 35, 45, 55, 65];
-            const stockAllocation = ages.map(age => {
-                if (age === currentAge) {
-                    return Math.max(100 - currentAge, 20); // Highlighted current age
-                }
-                return Math.max(100 - age, 20); // Rule: 100 - age = stock %
-            });
+            // Generate dynamic ages around current age
+            const baseAges = [25, 35, 45, 55, 65];
+            const ages = [];
 
+            // Add current age if it's not in the standard list
+            if (!baseAges.includes(currentAge) && currentAge >= 25 && currentAge <= 65) {
+                // Insert current age in sorted order
+                const allAges = [...baseAges, currentAge].sort((a, b) => a - b);
+                // Keep only 5 most relevant ages
+                const currentIndex = allAges.indexOf(currentAge);
+                const start = Math.max(0, currentIndex - 2);
+                const end = Math.min(allAges.length, start + 5);
+                ages.push(...allAges.slice(start, end));
+            } else {
+                ages.push(...baseAges);
+            }
+
+            const stockAllocation = ages.map(age => Math.max(100 - age, 20));
             const bondAllocation = stockAllocation.map(stocks => 100 - stocks);
 
+            // Highlight current age
+            const labels = ages.map(age => {
+                if (age === currentAge) {
+                    return `${age} Jahre ★`;
+                }
+                return `${age} Jahre`;
+            });
+
+            allocationChart.data.labels = labels;
             allocationChart.data.datasets[0].data = stockAllocation;
             allocationChart.data.datasets[1].data = bondAllocation;
             allocationChart.update();
@@ -2260,10 +3007,19 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize input fields with saved values
+            document.getElementById('savingsRate').value = savingsRate;
+            document.getElementById('savingsRateMonthly').value = monthlySavings;
+            document.getElementById('currentAge').value = currentAge;
+            updateRangeDisplays();
+
             // Modal controls
             document.getElementById('settingsBtn').addEventListener('click', openModal);
             document.getElementById('closeModal').addEventListener('click', closeModal);
             document.getElementById('saveSettings').addEventListener('click', saveSettings);
+
+            // Scroll to top
+            document.getElementById('scrollTopBtn').addEventListener('click', scrollToTop);
 
             // Close modal when clicking overlay
             document.getElementById('settingsModal').addEventListener('click', (e) => {
@@ -2287,6 +3043,11 @@
                     closeModal();
                 }
             });
+
+            // Initialize with saved settings
+            updateCharts();
+            updateActiveNav();
+            handleScrollButtons();
         });
 
         // Compound Interest Chart
@@ -2478,6 +3239,108 @@
                         grid: { color: '#1f1f23' },
                         min: 0,
                         max: 20
+                    }
+                }
+            }
+        });
+
+        // Interest Loss Chart - Purchasing Power Erosion
+        const interestLossCtx = document.getElementById('interestLossChart').getContext('2d');
+
+        // Calculate purchasing power over 20 years
+        const years = [];
+        const noInterestReal = [];
+        const lowInterestReal = [];
+        const initialAmount = 10000;
+        const inflation = 0.02; // 2% inflation
+        const lowInterest = 0.005; // 0.5% interest
+
+        for (let year = 0; year <= 20; year++) {
+            years.push(year);
+
+            // With 0% interest, only inflation affects value
+            const noInterestNominal = initialAmount;
+            const noInterestPurchasingPower = noInterestNominal / Math.pow(1 + inflation, year);
+            noInterestReal.push(Math.round(noInterestPurchasingPower));
+
+            // With 0.5% interest
+            const lowInterestNominal = initialAmount * Math.pow(1 + lowInterest, year);
+            const lowInterestPurchasingPower = lowInterestNominal / Math.pow(1 + inflation, year);
+            lowInterestReal.push(Math.round(lowInterestPurchasingPower));
+        }
+
+        interestLossChart = new Chart(interestLossCtx, {
+            type: 'line',
+            data: {
+                labels: years.map(y => y === 0 ? 'Start' : `${y} J.`),
+                datasets: [{
+                    label: '0.00% Zins (typische Grossbank)',
+                    data: noInterestReal,
+                    borderColor: '#f87171',
+                    backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }, {
+                    label: '0.50% Zins (Alternative Bank)',
+                    data: lowInterestReal,
+                    borderColor: '#d4a574',
+                    backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }, {
+                    label: 'Nominaler Wert (ohne Inflation)',
+                    data: years.map(() => initialAmount),
+                    borderColor: '#71717a',
+                    backgroundColor: 'transparent',
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#a1a1aa',
+                            padding: 15,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: context => {
+                                const value = context.parsed.y;
+                                const loss = initialAmount - value;
+                                return `${context.dataset.label}: CHF ${value.toLocaleString('de-CH')} (Verlust: CHF ${loss.toLocaleString('de-CH')})`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#1f1f23' },
+                        ticks: { color: '#a1a1aa' }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Reale Kaufkraft (CHF)',
+                            color: '#a1a1aa'
+                        },
+                        grid: { color: '#1f1f23' },
+                        ticks: {
+                            color: '#a1a1aa',
+                            callback: value => `CHF ${value.toLocaleString('de-CH')}`
+                        },
+                        min: 6000,
+                        max: 11000
                     }
                 }
             }
