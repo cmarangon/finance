@@ -14,7 +14,9 @@ function initCarCalculator() {
     const inputs = {
         availableMoney: document.getElementById('availableMoney'),
         carPrice: document.getElementById('carPrice'),
-        interestRate: document.getElementById('interestRate'),
+        creditRate: document.getElementById('creditRate'),
+        leasingRate: document.getElementById('leasingRate'),
+        serviceFees: document.getElementById('serviceFees'),
         duration: document.getElementById('duration'),
         investmentReturn: document.getElementById('investmentReturn')
     };
@@ -64,7 +66,9 @@ function updateCarDisplays(inputs) {
 
     document.getElementById('availableMoneyDisplay').textContent = formatCHF(inputs.availableMoney.value);
     document.getElementById('carPriceDisplay').textContent = formatCHF(inputs.carPrice.value);
-    document.getElementById('interestRateDisplay').textContent = `${parseFloat(inputs.interestRate.value).toFixed(1)}%`;
+    document.getElementById('creditRateDisplay').textContent = `${parseFloat(inputs.creditRate.value).toFixed(1)}%`;
+    document.getElementById('leasingRateDisplay').textContent = `${parseFloat(inputs.leasingRate.value).toFixed(1)}%`;
+    document.getElementById('serviceFeesDisplay').textContent = formatCHF(inputs.serviceFees.value);
     document.getElementById('durationDisplay').textContent = `${inputs.duration.value} Monate`;
     document.getElementById('investmentReturnDisplay').textContent = `${parseFloat(inputs.investmentReturn.value).toFixed(1)}%`;
     document.getElementById('resultDuration').textContent = inputs.duration.value;
@@ -74,7 +78,9 @@ function updateCarDisplays(inputs) {
 function calculateCarComparison(inputs) {
     const availableMoney = parseFloat(inputs.availableMoney.value);
     const carPrice = parseFloat(inputs.carPrice.value);
-    const interestRate = parseFloat(inputs.interestRate.value) / 100;
+    const creditRate = parseFloat(inputs.creditRate.value) / 100;
+    const leasingRate = parseFloat(inputs.leasingRate.value) / 100;
+    const serviceFees = parseFloat(inputs.serviceFees.value);
     const duration = parseInt(inputs.duration.value);
     const investmentReturn = parseFloat(inputs.investmentReturn.value) / 100;
 
@@ -85,16 +91,16 @@ function calculateCarComparison(inputs) {
     const carValueAtEnd = calculateCarValue(carPrice, duration);
 
     // === OPTION 1: BARKAUF (Cash Purchase) ===
-    const barkaufData = calculateBarkauf(availableMoney, carPrice, duration, monthlyReturn, carValueAtEnd);
+    const barkaufData = calculateBarkauf(availableMoney, carPrice, serviceFees, duration, monthlyReturn, carValueAtEnd);
 
     // === OPTION 2: LEASING ===
-    const leasingData = calculateLeasing(availableMoney, carPrice, duration, interestRate, monthlyReturn);
+    const leasingData = calculateLeasing(availableMoney, carPrice, duration, leasingRate, monthlyReturn);
 
     // === OPTION 3: KREDIT (Loan) ===
-    const kreditData = calculateKredit(availableMoney, carPrice, duration, interestRate, monthlyReturn, carValueAtEnd);
+    const kreditData = calculateKredit(availableMoney, carPrice, serviceFees, duration, creditRate, monthlyReturn, carValueAtEnd);
 
     // Update results display
-    updateResults(barkaufData, leasingData, kreditData, duration, carValueAtEnd);
+    updateResults(barkaufData, leasingData, kreditData, duration, carPrice, serviceFees, carValueAtEnd);
 
     // Store data for chart rendering
     lastCalculationData = {
@@ -135,16 +141,24 @@ function calculateCarValue(price, months) {
 }
 
 // BARKAUF calculation
-function calculateBarkauf(availableMoney, carPrice, duration, monthlyReturn, carValueAtEnd) {
+function calculateBarkauf(availableMoney, carPrice, serviceFees, duration, monthlyReturn, carValueAtEnd) {
     const data = [];
-    let invested = availableMoney - carPrice;
+    const totalInitialCost = carPrice + serviceFees;
+    let invested = availableMoney - totalInitialCost;
 
     // Can't afford cash purchase
     if (invested < 0) {
         for (let m = 0; m <= duration; m++) {
             data.push({ month: m, wealth: 0, portfolio: 0, carValue: 0 });
         }
-        return { monthlyData: data, finalWealth: 0, totalCost: carPrice };
+        return {
+            monthlyData: data,
+            finalWealth: 0,
+            totalCost: totalInitialCost,
+            serviceFees: serviceFees,
+            initialInvestment: totalInitialCost,
+            canAfford: false
+        };
     }
 
     for (let m = 0; m <= duration; m++) {
@@ -159,21 +173,33 @@ function calculateBarkauf(availableMoney, carPrice, duration, monthlyReturn, car
         });
     }
 
+    const finalPortfolio = data[data.length - 1].portfolio;
     const finalWealth = data[data.length - 1].wealth;
-    const totalCost = carPrice - carValueAtEnd; // Net cost after selling
+    const depreciation = carPrice - carValueAtEnd;
+    const totalCost = depreciation + serviceFees;
 
-    return { monthlyData: data, finalWealth, totalCost };
+    return {
+        monthlyData: data,
+        finalWealth,
+        finalPortfolio,
+        totalCost,
+        serviceFees: serviceFees,
+        depreciation: depreciation,
+        initialInvestment: totalInitialCost,
+        carValueAtEnd: carValueAtEnd,
+        canAfford: true
+    };
 }
 
 // LEASING calculation
-function calculateLeasing(availableMoney, carPrice, duration, interestRate, monthlyReturn) {
+function calculateLeasing(availableMoney, carPrice, duration, leasingRate, monthlyReturn) {
     const data = [];
 
     // Leasing typically covers depreciation + interest + profit margin
     // Simplified: monthly rate covers the difference between purchase and residual value + interest
     const residualValue = carPrice * 0.45; // 45% residual after typical lease
     const depreciationCost = carPrice - residualValue;
-    const totalInterest = (carPrice + residualValue) / 2 * interestRate * (duration / 12);
+    const totalInterest = (carPrice + residualValue) / 2 * leasingRate * (duration / 12);
     const monthlyPayment = (depreciationCost + totalInterest) / duration;
 
     let portfolio = availableMoney;
@@ -194,18 +220,27 @@ function calculateLeasing(availableMoney, carPrice, duration, interestRate, mont
         });
     }
 
-    const finalWealth = Math.max(0, data[data.length - 1].wealth);
+    const finalPortfolio = Math.max(0, data[data.length - 1].portfolio);
+    const finalWealth = finalPortfolio; // No car value at end
     const totalCost = monthlyPayment * duration;
 
-    return { monthlyData: data, finalWealth, totalCost, monthlyPayment: Math.round(monthlyPayment) };
+    return {
+        monthlyData: data,
+        finalWealth,
+        finalPortfolio,
+        totalCost,
+        monthlyPayment: Math.round(monthlyPayment),
+        totalPaid: Math.round(totalCost),
+        duration: duration
+    };
 }
 
 // KREDIT calculation
-function calculateKredit(availableMoney, carPrice, duration, interestRate, monthlyReturn, carValueAtEnd) {
+function calculateKredit(availableMoney, carPrice, serviceFees, duration, creditRate, monthlyReturn, carValueAtEnd) {
     const data = [];
 
     // Calculate monthly credit payment (annuity formula)
-    const monthlyInterest = interestRate / 12;
+    const monthlyInterest = creditRate / 12;
     let monthlyPayment;
 
     if (monthlyInterest === 0) {
@@ -215,7 +250,8 @@ function calculateKredit(availableMoney, carPrice, duration, interestRate, month
             (Math.pow(1 + monthlyInterest, duration) - 1);
     }
 
-    let portfolio = availableMoney;
+    // Service fees are paid upfront
+    let portfolio = availableMoney - serviceFees;
     let remainingDebt = carPrice;
 
     for (let m = 0; m <= duration; m++) {
@@ -243,63 +279,99 @@ function calculateKredit(availableMoney, carPrice, duration, interestRate, month
         });
     }
 
+    const finalPortfolio = data[data.length - 1].portfolio;
     const finalWealth = data[data.length - 1].wealth;
     const totalPaid = monthlyPayment * duration;
     const totalInterestPaid = totalPaid - carPrice;
-    const totalCost = (carPrice - carValueAtEnd) + totalInterestPaid;
+    const depreciation = carPrice - carValueAtEnd;
+    const totalCost = depreciation + totalInterestPaid + serviceFees;
 
     return {
         monthlyData: data,
         finalWealth,
+        finalPortfolio,
         totalCost,
         monthlyPayment: Math.round(monthlyPayment),
-        totalInterest: Math.round(totalInterestPaid)
+        totalInterest: Math.round(totalInterestPaid),
+        serviceFees: serviceFees,
+        depreciation: depreciation,
+        carValueAtEnd: carValueAtEnd,
+        duration: duration
     };
 }
 
 // Update results display
-function updateResults(barkauf, leasing, kredit, duration, carValueAtEnd) {
+function updateResults(barkauf, leasing, kredit, duration, carPrice, serviceFees, carValueAtEnd) {
     const formatCHF = (val) => `CHF ${Math.round(val).toLocaleString('de-CH')}`;
+    const formatCHFNeg = (val) => `-CHF ${Math.round(Math.abs(val)).toLocaleString('de-CH')}`;
 
-    // Update values
-    document.getElementById('barkaufValue').textContent = formatCHF(barkauf.finalWealth);
-    document.getElementById('leasingValue').textContent = formatCHF(leasing.finalWealth);
-    document.getElementById('kreditValue').textContent = formatCHF(kredit.finalWealth);
+    // === BARKAUF Panel ===
+    document.getElementById('barkaufKaufpreis').textContent = formatCHF(carPrice);
+    document.getElementById('barkaufNebenkosten').textContent = formatCHF(serviceFees);
+    document.getElementById('barkaufTotalInitial').textContent = formatCHF(carPrice + serviceFees);
+    document.getElementById('barkaufPortfolio').textContent = formatCHF(barkauf.finalPortfolio || 0);
+    document.getElementById('barkaufCarValue').textContent = formatCHF(carValueAtEnd);
+    document.getElementById('barkaufTotal').textContent = formatCHF(barkauf.finalWealth);
+    document.getElementById('barkaufDepreciation').textContent = formatCHFNeg(barkauf.depreciation || 0);
+    document.getElementById('barkaufFees').textContent = formatCHFNeg(serviceFees);
+    document.getElementById('barkaufTotalCost').textContent = formatCHFNeg(barkauf.totalCost || 0);
 
-    // Update details
-    document.getElementById('barkaufDetail').textContent = `Auto-Restwert: ${formatCHF(carValueAtEnd)}`;
-    document.getElementById('leasingDetail').textContent = `Rate: ${formatCHF(leasing.monthlyPayment)}/Mt - Kein Eigentum!`;
-    document.getElementById('kreditDetail').textContent = `Rate: ${formatCHF(kredit.monthlyPayment)}/Mt, Zinsen: ${formatCHF(kredit.totalInterest)}`;
+    // === LEASING Panel ===
+    document.getElementById('leasingMonthlyRate').textContent = `${formatCHF(leasing.monthlyPayment)}/Mt.`;
+    document.getElementById('leasingRateCount').textContent = `${duration} Monate`;
+    document.getElementById('leasingTotalPaid').textContent = formatCHF(leasing.totalPaid);
+    document.getElementById('leasingPortfolio').textContent = formatCHF(leasing.finalPortfolio);
+    document.getElementById('leasingTotal').textContent = formatCHF(leasing.finalWealth);
+    document.getElementById('leasingAllRates').textContent = formatCHFNeg(leasing.totalPaid);
+    document.getElementById('leasingTotalCost').textContent = formatCHFNeg(leasing.totalCost);
+
+    // === KREDIT Panel ===
+    document.getElementById('kreditMonthlyRate').textContent = `${formatCHF(kredit.monthlyPayment)}/Mt.`;
+    document.getElementById('kreditDuration').textContent = `${duration} Monate`;
+    document.getElementById('kreditInterest').textContent = formatCHFNeg(kredit.totalInterest);
+    document.getElementById('kreditPortfolio').textContent = formatCHF(kredit.finalPortfolio);
+    document.getElementById('kreditCarValue').textContent = formatCHF(carValueAtEnd);
+    document.getElementById('kreditTotal').textContent = formatCHF(kredit.finalWealth);
+    document.getElementById('kreditDepreciation').textContent = formatCHFNeg(kredit.depreciation);
+    document.getElementById('kreditFeesAndInterest').textContent = formatCHFNeg(kredit.totalInterest + serviceFees);
+    document.getElementById('kreditTotalCost').textContent = formatCHFNeg(kredit.totalCost);
 
     // Determine best option
     const results = [
-        { name: 'Barkauf', wealth: barkauf.finalWealth, elem: 'resultBarkauf' },
-        { name: 'Leasing', wealth: leasing.finalWealth, elem: 'resultLeasing' },
-        { name: 'Kredit', wealth: kredit.finalWealth, elem: 'resultKredit' }
+        { name: 'Barkauf', wealth: barkauf.finalWealth, panel: 'panelBarkauf', badge: 'barkaufBadge' },
+        { name: 'Leasing', wealth: leasing.finalWealth, panel: 'panelLeasing', badge: 'leasingBadge' },
+        { name: 'Kredit', wealth: kredit.finalWealth, panel: 'panelKredit', badge: 'kreditBadge' }
     ];
 
-    // Remove all highlight classes
+    // Remove all highlight classes from panels
     results.forEach(r => {
-        document.getElementById(r.elem).classList.remove('result-best', 'result-worst');
+        document.getElementById(r.panel).classList.remove('panel-best', 'panel-worst');
+        document.getElementById(r.badge).style.display = 'none';
     });
 
     // Sort by wealth (highest first)
     results.sort((a, b) => b.wealth - a.wealth);
 
-    // Add highlight to best
-    document.getElementById(results[0].elem).classList.add('result-best');
-    document.getElementById(results[2].elem).classList.add('result-worst');
+    // Highlight best and worst panels
+    document.getElementById(results[0].panel).classList.add('panel-best');
+    document.getElementById(results[0].badge).style.display = 'inline-block';
+    document.getElementById(results[0].badge).textContent = 'Beste Option';
+    document.getElementById(results[0].badge).className = 'panel-badge';
 
-    // Update recommendation
+    document.getElementById(results[2].panel).classList.add('panel-worst');
+
+    // Update recommendation banner
     const recommendation = document.getElementById('recommendation');
-    if (barkauf.finalWealth === 0) {
-        recommendation.innerHTML = `<strong>Hinweis:</strong> Du hast nicht genug Kapital für einen Barkauf. Vergleiche <strong>Leasing</strong> vs. <strong>Kredit</strong>.`;
+    const diff = Math.round(results[0].wealth - results[1].wealth);
+
+    if (!barkauf.canAfford) {
+        recommendation.innerHTML = `Du hast nicht genug Kapital für Barkauf. <strong>Leasing</strong> ergibt ${formatCHF(leasing.finalWealth)}, <strong>Kredit</strong> ergibt ${formatCHF(kredit.finalWealth)}.`;
     } else if (results[0].name === 'Barkauf') {
-        recommendation.innerHTML = `<strong>Empfehlung:</strong> Der <strong>Barkauf</strong> ist hier die beste Option. Du sparst Zinsen und hast das Auto sofort.`;
+        recommendation.innerHTML = `<strong>Barkauf</strong> ist die beste Option mit <strong>${formatCHF(diff)}</strong> mehr Vermögen als ${results[1].name}. Du sparst Zinsen und besitzt das Auto sofort.`;
     } else if (results[0].name === 'Kredit') {
-        recommendation.innerHTML = `<strong>Empfehlung:</strong> Bei diesen Rendite-Erwartungen könnte ein <strong>Kredit</strong> sinnvoll sein, da dein Geld mehr verdient als der Kredit kostet.`;
+        recommendation.innerHTML = `<strong>Kredit</strong> ist hier besser – dein investiertes Geld verdient mehr als der Kredit kostet. Vorteil: <strong>${formatCHF(diff)}</strong> gegenüber ${results[1].name}.`;
     } else {
-        recommendation.innerHTML = `<strong>Hinweis:</strong> <strong>Leasing</strong> zeigt hier das höchste Restvermögen, aber bedenke: Am Ende gehört dir das Auto nicht!`;
+        recommendation.innerHTML = `<strong>Leasing</strong> zeigt das höchste Restvermögen, aber <strong>Achtung:</strong> Am Ende gehört dir das Auto nicht!`;
     }
 }
 

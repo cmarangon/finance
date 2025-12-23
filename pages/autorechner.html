@@ -7,100 +7,276 @@
     </div>
 
     <div class="bento-grid">
-        <!-- Calculator Inputs -->
-        <div class="card card-md">
-            <div class="card-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                    <line x1="8" y1="21" x2="16" y2="21"/>
-                    <line x1="12" y1="17" x2="12" y2="21"/>
-                </svg>
-            </div>
+        <!-- Calculator Inputs - Full Width with 2 Columns -->
+        <div class="card card-full">
             <h3>Deine Ausgangslage</h3>
 
-            <div class="calculator-inputs">
-                <div class="input-group">
-                    <label for="availableMoney">
-                        Verfügbares Kapital
-                        <span class="value-display" id="availableMoneyDisplay">CHF 50'000</span>
-                    </label>
-                    <input type="range" id="availableMoney" value="50000" min="10000" max="200000" step="5000">
-                    <div class="control-hint">Dein aktuelles Erspartes (CHF 10'000 - 200'000)</div>
+            <div class="calculator-inputs-grid">
+                <!-- Left Column: Money -->
+                <div class="input-column">
+                    <div class="input-column-header">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+                            <path d="M12 18V6"/>
+                        </svg>
+                        Kapital & Kosten
+                    </div>
+
+                    <div class="input-group">
+                        <label for="availableMoney">
+                            Verfügbares Kapital
+                            <span class="value-display" id="availableMoneyDisplay">CHF 50'000</span>
+                        </label>
+                        <input type="range" id="availableMoney" value="50000" min="10000" max="200000" step="5000">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="carPrice">
+                            Autopreis
+                            <span class="value-display" id="carPriceDisplay">CHF 35'000</span>
+                        </label>
+                        <input type="range" id="carPrice" value="35000" min="5000" max="100000" step="1000">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="serviceFees">
+                            Nebenkosten
+                            <span class="value-display" id="serviceFeesDisplay">CHF 500</span>
+                        </label>
+                        <input type="range" id="serviceFees" value="500" min="0" max="2000" step="50">
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <label for="carPrice">
-                        Autopreis
-                        <span class="value-display" id="carPriceDisplay">CHF 35'000</span>
-                    </label>
-                    <input type="range" id="carPrice" value="35000" min="5000" max="100000" step="1000">
-                    <div class="control-hint">Kaufpreis des Fahrzeugs (CHF 5'000 - 100'000)</div>
-                </div>
+                <!-- Right Column: Financing -->
+                <div class="input-column">
+                    <div class="input-column-header">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        Finanzierung
+                    </div>
 
-                <div class="input-group">
-                    <label for="interestRate">
-                        Kreditzins / Leasingzins
-                        <span class="value-display" id="interestRateDisplay">4.9%</span>
-                    </label>
-                    <input type="range" id="interestRate" value="4.9" min="0" max="12" step="0.1">
-                    <div class="control-hint">Jährlicher Zinssatz für Kredit/Leasing (0 - 12%)</div>
-                </div>
+                    <div class="input-row">
+                        <div class="input-group input-group-half">
+                            <label for="creditRate">
+                                Kreditzins
+                                <span class="value-display" id="creditRateDisplay">4.9%</span>
+                            </label>
+                            <input type="range" id="creditRate" value="4.9" min="0" max="12" step="0.1">
+                        </div>
 
-                <div class="input-group">
-                    <label for="duration">
-                        Laufzeit
-                        <span class="value-display" id="durationDisplay">48 Monate</span>
-                    </label>
-                    <input type="range" id="duration" value="48" min="12" max="84" step="6">
-                    <div class="control-hint">Kredit-/Leasinglaufzeit (12 - 84 Monate)</div>
-                </div>
+                        <div class="input-group input-group-half">
+                            <label for="leasingRate">
+                                Leasingzins
+                                <span class="value-display" id="leasingRateDisplay">2.9%</span>
+                            </label>
+                            <input type="range" id="leasingRate" value="2.9" min="0" max="10" step="0.1">
+                        </div>
+                    </div>
 
-                <div class="input-group">
-                    <label for="investmentReturn">
-                        Erwartete Anlagerendite
-                        <span class="value-display" id="investmentReturnDisplay">7%</span>
-                    </label>
-                    <input type="range" id="investmentReturn" value="7" min="0" max="12" step="0.5">
-                    <div class="control-hint">Was dein Geld sonst verdienen würde (0 - 12% p.a.)</div>
+                    <div class="input-row">
+                        <div class="input-group input-group-half">
+                            <label for="duration">
+                                Laufzeit
+                                <span class="value-display" id="durationDisplay">48 Monate</span>
+                            </label>
+                            <input type="range" id="duration" value="48" min="12" max="84" step="6">
+                        </div>
+
+                        <div class="input-group input-group-half">
+                            <label for="investmentReturn">
+                                Anlagerendite
+                                <span class="value-display" id="investmentReturnDisplay">7.0%</span>
+                            </label>
+                            <input type="range" id="investmentReturn" value="7" min="0" max="12" step="0.5">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Results Summary -->
-        <div class="card card-md">
-            <h3>Ergebnis nach <span id="resultDuration">48</span> Monaten</h3>
-
-            <div class="results-grid">
-                <div class="result-item result-best" id="resultBarkauf">
-                    <div class="result-label">
-                        <span class="result-icon">💵</span>
-                        Barkauf
-                    </div>
-                    <div class="result-value" id="barkaufValue">CHF 28'450</div>
-                    <div class="result-detail" id="barkaufDetail">Restkapital nach Kauf</div>
+        <!-- Results with Recommendation Banner -->
+        <div class="card card-full">
+            <!-- Recommendation Banner -->
+            <div class="recommendation-banner" id="recommendationBanner">
+                <div class="recommendation-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
                 </div>
-
-                <div class="result-item" id="resultLeasing">
-                    <div class="result-label">
-                        <span class="result-icon">📋</span>
-                        Leasing
-                    </div>
-                    <div class="result-value" id="leasingValue">CHF 24'120</div>
-                    <div class="result-detail" id="leasingDetail">Kein Auto-Eigentum!</div>
-                </div>
-
-                <div class="result-item" id="resultKredit">
-                    <div class="result-label">
-                        <span class="result-icon">🏦</span>
-                        Kredit
-                    </div>
-                    <div class="result-value" id="kreditValue">CHF 25'890</div>
-                    <div class="result-detail" id="kreditDetail">Inkl. Zinskosten</div>
+                <div class="recommendation-content">
+                    <div class="recommendation-title">Ergebnis nach <span id="resultDuration">48</span> Monaten</div>
+                    <div class="recommendation-text" id="recommendation">Bei dieser Anlagerendite ist <strong>Kredit</strong> die beste Option mit <strong>CHF 1'659</strong> mehr Vermögen.</div>
                 </div>
             </div>
 
-            <div class="info-box" id="recommendationBox" style="margin-top: 1.5rem;">
-                <p id="recommendation"><strong>Empfehlung:</strong> Bei diesen Werten ist der <strong>Barkauf</strong> die beste Option für dein Vermögen.</p>
+            <h3 style="margin-top: 1.5rem;">Detaillierter Vergleich</h3>
+
+            <div class="comparison-panels">
+                <!-- Barkauf Panel -->
+                <div class="comparison-panel panel-barkauf" id="panelBarkauf">
+                    <div class="panel-header">
+                        <h4>💵 Barkauf</h4>
+                        <span class="panel-badge" id="barkaufBadge">Empfohlen</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-section">
+                            <h5>Initialkosten</h5>
+                            <div class="breakdown-row">
+                                <span>Kaufpreis</span>
+                                <span id="barkaufKaufpreis">CHF 35'000</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Nebenkosten</span>
+                                <span id="barkaufNebenkosten">CHF 500</span>
+                            </div>
+                            <div class="breakdown-row breakdown-total">
+                                <span>Total Anfangsinvestition</span>
+                                <span id="barkaufTotalInitial">CHF 35'500</span>
+                            </div>
+                        </div>
+                        <div class="panel-section">
+                            <h5>Vermögen am Ende</h5>
+                            <div class="breakdown-row">
+                                <span>Investiertes Portfolio</span>
+                                <span id="barkaufPortfolio">CHF 18'450</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Auto-Restwert</span>
+                                <span id="barkaufCarValue">CHF 22'000</span>
+                            </div>
+                            <div class="breakdown-row breakdown-total positive">
+                                <span>Gesamtvermögen</span>
+                                <span id="barkaufTotal">CHF 40'450</span>
+                            </div>
+                        </div>
+                        <div class="panel-section">
+                            <h5>Effektive Kosten</h5>
+                            <div class="breakdown-row">
+                                <span>Wertverlust Auto</span>
+                                <span class="negative" id="barkaufDepreciation">-CHF 13'000</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Nebenkosten</span>
+                                <span class="negative" id="barkaufFees">-CHF 500</span>
+                            </div>
+                            <div class="breakdown-row breakdown-total negative">
+                                <span>Total Kosten</span>
+                                <span id="barkaufTotalCost">-CHF 13'500</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leasing Panel -->
+                <div class="comparison-panel panel-leasing" id="panelLeasing">
+                    <div class="panel-header">
+                        <h4>📋 Leasing</h4>
+                        <span class="panel-badge panel-badge-warning" id="leasingBadge" style="display:none;">Kein Eigentum</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-section">
+                            <h5>Monatliche Kosten</h5>
+                            <div class="breakdown-row">
+                                <span>Leasingrate</span>
+                                <span id="leasingMonthlyRate">CHF 485/Mt.</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Anzahl Raten</span>
+                                <span id="leasingRateCount">48 Monate</span>
+                            </div>
+                            <div class="breakdown-row breakdown-total">
+                                <span>Total bezahlt</span>
+                                <span id="leasingTotalPaid">CHF 23'280</span>
+                            </div>
+                        </div>
+                        <div class="panel-section">
+                            <h5>Vermögen am Ende</h5>
+                            <div class="breakdown-row">
+                                <span>Investiertes Portfolio</span>
+                                <span id="leasingPortfolio">CHF 34'120</span>
+                            </div>
+                            <div class="breakdown-row" style="color: var(--text-muted);">
+                                <span>Auto-Wert</span>
+                                <span>CHF 0 (kein Eigentum)</span>
+                            </div>
+                            <div class="breakdown-row breakdown-total positive">
+                                <span>Gesamtvermögen</span>
+                                <span id="leasingTotal">CHF 34'120</span>
+                            </div>
+                        </div>
+                        <div class="panel-section">
+                            <h5>Effektive Kosten</h5>
+                            <div class="breakdown-row">
+                                <span>Alle Leasingraten</span>
+                                <span class="negative" id="leasingAllRates">-CHF 23'280</span>
+                            </div>
+                            <div class="breakdown-row" style="color: var(--text-muted); font-size: 0.85rem;">
+                                <span colspan="2">Hinweis: Kein Gegenwert am Ende!</span>
+                            </div>
+                            <div class="breakdown-row breakdown-total negative">
+                                <span>Total Kosten</span>
+                                <span id="leasingTotalCost">-CHF 23'280</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kredit Panel -->
+                <div class="comparison-panel panel-kredit" id="panelKredit">
+                    <div class="panel-header">
+                        <h4>🏦 Kredit</h4>
+                        <span class="panel-badge panel-badge-neutral" id="kreditBadge" style="display:none;">Alternative</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-section">
+                            <h5>Monatliche Kosten</h5>
+                            <div class="breakdown-row">
+                                <span>Kreditrate</span>
+                                <span id="kreditMonthlyRate">CHF 805/Mt.</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Laufzeit</span>
+                                <span id="kreditDuration">48 Monate</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Davon Zinsen total</span>
+                                <span class="negative" id="kreditInterest">-CHF 3'640</span>
+                            </div>
+                        </div>
+                        <div class="panel-section">
+                            <h5>Vermögen am Ende</h5>
+                            <div class="breakdown-row">
+                                <span>Investiertes Portfolio</span>
+                                <span id="kreditPortfolio">CHF 15'890</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Auto-Restwert</span>
+                                <span id="kreditCarValue">CHF 22'000</span>
+                            </div>
+                            <div class="breakdown-row breakdown-total positive">
+                                <span>Gesamtvermögen</span>
+                                <span id="kreditTotal">CHF 37'890</span>
+                            </div>
+                        </div>
+                        <div class="panel-section">
+                            <h5>Effektive Kosten</h5>
+                            <div class="breakdown-row">
+                                <span>Wertverlust Auto</span>
+                                <span class="negative" id="kreditDepreciation">-CHF 13'000</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Zinsen + Nebenkosten</span>
+                                <span class="negative" id="kreditFeesAndInterest">-CHF 4'140</span>
+                            </div>
+                            <div class="breakdown-row breakdown-total negative">
+                                <span>Total Kosten</span>
+                                <span id="kreditTotalCost">-CHF 17'140</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -110,10 +286,38 @@
             <p style="color: var(--text-muted); margin-bottom: 1rem;">Klicke auf die Tabs um die Zusammensetzung jeder Option zu sehen.</p>
 
             <div class="chart-tabs">
-                <button class="chart-tab active" data-view="overview">Vergleich</button>
-                <button class="chart-tab" data-view="barkauf">Barkauf</button>
-                <button class="chart-tab" data-view="leasing">Leasing</button>
-                <button class="chart-tab" data-view="kredit">Kredit</button>
+                <button class="chart-tab active" data-view="overview">
+                    <svg class="chart-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    Vergleich
+                </button>
+                <button class="chart-tab" data-view="barkauf">
+                    <svg class="chart-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="6" width="20" height="12" rx="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <path d="M6 12h.01M18 12h.01"/>
+                    </svg>
+                    Barkauf
+                </button>
+                <button class="chart-tab" data-view="leasing">
+                    <svg class="chart-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    Leasing
+                </button>
+                <button class="chart-tab" data-view="kredit">
+                    <svg class="chart-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    Kredit
+                </button>
             </div>
 
             <div class="chart-container" style="height: 350px;">
@@ -193,6 +397,14 @@
                 <li>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
                     <strong>Leasing-Restwert:</strong> Typisch 40-50% nach 4 Jahren (hier: 45%)
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <strong>Zinsen:</strong> Leasingzins oft tiefer (Aktionen), Kreditzins meist höher (Bankkonditionen)
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <strong>Nebenkosten:</strong> Einlösung, Schilder, Admin bei Kauf (Bar/Kredit) - bei Leasing meist inklusive
                 </li>
                 <li>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>

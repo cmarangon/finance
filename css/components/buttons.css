@@ -200,51 +200,132 @@
 
 /* Chart Tabs */
 .chart-tabs {
-    display: flex;
-    gap: 0.5rem;
+    display: inline-flex;
+    gap: 0.375rem;
     margin-bottom: 1.5rem;
-    flex-wrap: wrap;
+    padding: 0.375rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .chart-tab {
-    padding: 0.625rem 1.25rem;
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    position: relative;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-radius: 10px;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: var(--font-sans);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    letter-spacing: 0.01em;
+}
+
+.chart-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
 }
 
 .chart-tab:hover {
-    background: var(--bg-hover);
-    border-color: var(--border-accent);
     color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.chart-tab:hover::before {
+    opacity: 1;
 }
 
 .chart-tab.active {
+    color: #fff;
     background: var(--accent-gradient);
-    color: #ffffff;
-    border-color: transparent;
-    box-shadow: 0 4px 12px var(--accent-glow);
+    box-shadow:
+        0 4px 16px var(--accent-glow),
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.chart-tab.active::before {
+    opacity: 0;
+}
+
+/* Option-specific active colors */
+.chart-tab[data-view="barkauf"] {
+    --tab-color: #22c55e;
+    --tab-color-dark: #16a34a;
+}
+
+.chart-tab[data-view="leasing"] {
+    --tab-color: #f59e0b;
+    --tab-color-dark: #d97706;
+}
+
+.chart-tab[data-view="kredit"] {
+    --tab-color: #ef4444;
+    --tab-color-dark: #dc2626;
+}
+
+.chart-tab[data-view="barkauf"]:not(.active):hover {
+    color: var(--tab-color);
+}
+
+.chart-tab[data-view="leasing"]:not(.active):hover {
+    color: var(--tab-color);
+}
+
+.chart-tab[data-view="kredit"]:not(.active):hover {
+    color: var(--tab-color);
 }
 
 .chart-tab[data-view="barkauf"].active {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    background: linear-gradient(135deg, var(--tab-color) 0%, var(--tab-color-dark) 100%);
+    box-shadow:
+        0 4px 16px rgba(34, 197, 94, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .chart-tab[data-view="leasing"].active {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    background: linear-gradient(135deg, var(--tab-color) 0%, var(--tab-color-dark) 100%);
+    box-shadow:
+        0 4px 16px rgba(245, 158, 11, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .chart-tab[data-view="kredit"].active {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    background: linear-gradient(135deg, var(--tab-color) 0%, var(--tab-color-dark) 100%);
+    box-shadow:
+        0 4px 16px rgba(239, 68, 68, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Tab icons */
+.chart-tab-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.chart-tab:hover .chart-tab-icon,
+.chart-tab.active .chart-tab-icon {
+    opacity: 1;
 }
 
 /* Responsive */
@@ -264,11 +345,21 @@
     }
 
     .chart-tabs {
-        gap: 0.375rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        padding: 0.25rem;
+        border-radius: 12px;
     }
 
     .chart-tab {
-        padding: 0.5rem 0.875rem;
+        padding: 0.625rem 1rem;
         font-size: 0.8125rem;
+        border-radius: 8px;
+    }
+
+    .chart-tab-icon {
+        width: 14px;
+        height: 14px;
     }
 }
