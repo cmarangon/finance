@@ -2,8 +2,8 @@
 // Dependencies: None
 
 // Chart.js default configuration
-Chart.defaults.color = '#a1a1aa';
-Chart.defaults.borderColor = '#27272a';
+Chart.defaults.color = '#c9c9d1';
+Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.08)';
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 
 // Default application settings

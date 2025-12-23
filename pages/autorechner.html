@@ -1,0 +1,200 @@
+<!-- Section: Auto-Rechner -->
+<section id="autorechner">
+    <div class="section-header">
+        <h4>Rechner</h4>
+        <h2>Auto: Kaufen vs. Leasing vs. Kredit</h2>
+        <p>Vergleiche die Auswirkungen auf dein Vermögen über Zeit. Was kostet dich ein Auto wirklich?</p>
+    </div>
+
+    <div class="bento-grid">
+        <!-- Calculator Inputs -->
+        <div class="card card-md">
+            <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+            </div>
+            <h3>Deine Ausgangslage</h3>
+
+            <div class="calculator-inputs">
+                <div class="input-group">
+                    <label for="availableMoney">
+                        Verfügbares Kapital
+                        <span class="value-display" id="availableMoneyDisplay">CHF 50'000</span>
+                    </label>
+                    <input type="range" id="availableMoney" value="50000" min="10000" max="200000" step="5000">
+                    <div class="control-hint">Dein aktuelles Erspartes (CHF 10'000 - 200'000)</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="carPrice">
+                        Autopreis
+                        <span class="value-display" id="carPriceDisplay">CHF 35'000</span>
+                    </label>
+                    <input type="range" id="carPrice" value="35000" min="5000" max="100000" step="1000">
+                    <div class="control-hint">Kaufpreis des Fahrzeugs (CHF 5'000 - 100'000)</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="interestRate">
+                        Kreditzins / Leasingzins
+                        <span class="value-display" id="interestRateDisplay">4.9%</span>
+                    </label>
+                    <input type="range" id="interestRate" value="4.9" min="0" max="12" step="0.1">
+                    <div class="control-hint">Jährlicher Zinssatz für Kredit/Leasing (0 - 12%)</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="duration">
+                        Laufzeit
+                        <span class="value-display" id="durationDisplay">48 Monate</span>
+                    </label>
+                    <input type="range" id="duration" value="48" min="12" max="84" step="6">
+                    <div class="control-hint">Kredit-/Leasinglaufzeit (12 - 84 Monate)</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="investmentReturn">
+                        Erwartete Anlagerendite
+                        <span class="value-display" id="investmentReturnDisplay">7%</span>
+                    </label>
+                    <input type="range" id="investmentReturn" value="7" min="0" max="12" step="0.5">
+                    <div class="control-hint">Was dein Geld sonst verdienen würde (0 - 12% p.a.)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Summary -->
+        <div class="card card-md">
+            <h3>Ergebnis nach <span id="resultDuration">48</span> Monaten</h3>
+
+            <div class="results-grid">
+                <div class="result-item result-best" id="resultBarkauf">
+                    <div class="result-label">
+                        <span class="result-icon">💵</span>
+                        Barkauf
+                    </div>
+                    <div class="result-value" id="barkaufValue">CHF 28'450</div>
+                    <div class="result-detail" id="barkaufDetail">Restkapital nach Kauf</div>
+                </div>
+
+                <div class="result-item" id="resultLeasing">
+                    <div class="result-label">
+                        <span class="result-icon">📋</span>
+                        Leasing
+                    </div>
+                    <div class="result-value" id="leasingValue">CHF 24'120</div>
+                    <div class="result-detail" id="leasingDetail">Kein Auto-Eigentum!</div>
+                </div>
+
+                <div class="result-item" id="resultKredit">
+                    <div class="result-label">
+                        <span class="result-icon">🏦</span>
+                        Kredit
+                    </div>
+                    <div class="result-value" id="kreditValue">CHF 25'890</div>
+                    <div class="result-detail" id="kreditDetail">Inkl. Zinskosten</div>
+                </div>
+            </div>
+
+            <div class="info-box" id="recommendationBox" style="margin-top: 1.5rem;">
+                <p id="recommendation"><strong>Empfehlung:</strong> Bei diesen Werten ist der <strong>Barkauf</strong> die beste Option für dein Vermögen.</p>
+            </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="card card-full">
+            <h3>Vermögensentwicklung über Zeit</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Vergleich: Wie entwickelt sich dein Gesamtvermögen bei jeder Option?</p>
+            <div class="chart-container" style="height: 350px;">
+                <canvas id="carComparisonChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Explanation Cards -->
+        <div class="card card-sm">
+            <h4 style="color: var(--success);">Barkauf</h4>
+            <h3>Sofort bezahlen</h3>
+            <p>Du zahlst den vollen Preis sofort. Das Restkapital kann weiter investiert werden.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Keine Zinsen
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Sofort Eigentümer
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Freie Verkaufsmöglichkeit
+                </li>
+            </ul>
+        </div>
+
+        <div class="card card-sm">
+            <h4 style="color: var(--warning);">Leasing</h4>
+            <h3>Mieten statt kaufen</h3>
+            <p>Monatliche Raten, aber das Auto gehört dir nie. Am Ende: kein Eigentum.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Niedrige Monatsraten
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                    Kein Eigentum
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                    Km-Beschränkungen
+                </li>
+            </ul>
+        </div>
+
+        <div class="card card-sm">
+            <h4 style="color: var(--danger);">Autokredit</h4>
+            <h3>Finanzieren</h3>
+            <p>Du wirst Eigentümer, zahlst aber Zinsen auf den Kredit.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Wirst Eigentümer
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Kapital bleibt investiert
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+                    Zinskosten
+                </li>
+            </ul>
+        </div>
+
+        <!-- Important Notes -->
+        <div class="card card-full" style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.08) 100%); border: 1px solid var(--border-accent);">
+            <h3 style="color: var(--accent);">Wichtige Annahmen</h3>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <strong>Wertverlust:</strong> Das Auto verliert ca. 15% im ersten Jahr, danach 10% pro Jahr
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <strong>Leasing-Restwert:</strong> Typisch 40-50% nach 4 Jahren (hier: 45%)
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <strong>Opportunitätskosten:</strong> Nicht investiertes Geld "kostet" dich die entgangene Rendite
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <strong>Steuern & Versicherung:</strong> Hier nicht berücksichtigt (sind bei allen Optionen ähnlich)
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>

@@ -76,17 +76,19 @@ function initAndUpdateCompoundChart() {
                 datasets: [{
                     label: 'Mit Zinseszins (7%)',
                     data: [principal, ...investmentData],
-                    borderColor: '#d4a574',
-                    backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                    borderColor: '#d4af37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.15)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.4,
+                    borderWidth: 3
                 }, {
                     label: `Sparkonto (${savingsRate.toFixed(2)}%)`,
                     data: [principal, ...savingsData],
-                    borderColor: '#71717a',
+                    borderColor: '#8a8a98',
                     borderDash: [5, 5],
                     fill: false,
-                    tension: 0.4
+                    tension: 0.4,
+                    borderWidth: 2
                 }]
             },
             options: {
@@ -98,10 +100,16 @@ function initAndUpdateCompoundChart() {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: '#1f1f23' },
-                        ticks: { callback: value => 'CHF ' + value.toLocaleString() }
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: {
+                            callback: value => 'CHF ' + value.toLocaleString(),
+                            color: '#c9c9d1'
+                        }
                     },
-                    x: { grid: { display: false } }
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#c9c9d1' }
+                    }
                 }
             }
         });
@@ -155,17 +163,19 @@ function initAndUpdateLifestyleChart() {
                 datasets: [{
                     label: `Hohe Sparrate (CHF ${Math.round(highSavingsRate)}/Mt)`,
                     data: highSavingsData,
-                    borderColor: '#4ade80',
-                    backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.4,
+                    borderWidth: 3
                 }, {
                     label: `Niedrige Sparrate (CHF ${Math.round(lowSavingsRate)}/Mt)`,
                     data: lowSavingsData,
-                    borderColor: '#f87171',
-                    backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.4,
+                    borderWidth: 3
                 }]
             },
             options: {
@@ -177,10 +187,16 @@ function initAndUpdateLifestyleChart() {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: '#1f1f23' },
-                        ticks: { callback: value => 'CHF ' + (value / 1000000).toFixed(1) + 'M' }
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: {
+                            callback: value => 'CHF ' + (value / 1000000).toFixed(1) + 'M',
+                            color: '#c9c9d1'
+                        }
                     },
-                    x: { grid: { display: false } }
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#c9c9d1' }
+                    }
                 }
             }
         });
@@ -229,11 +245,15 @@ function initAndUpdateAllocationChart() {
                 datasets: [{
                     label: 'Aktien',
                     data: stockAllocation,
-                    backgroundColor: '#d4a574'
+                    backgroundColor: '#d4af37',
+                    borderColor: '#f4d03f',
+                    borderWidth: 1
                 }, {
                     label: 'Obligationen',
                     data: bondAllocation,
-                    backgroundColor: '#52525b'
+                    backgroundColor: '#3a3a48',
+                    borderColor: '#4a4a58',
+                    borderWidth: 1
                 }]
             },
             options: {
@@ -243,12 +263,19 @@ function initAndUpdateAllocationChart() {
                     legend: { position: 'bottom', labels: { padding: 20 } }
                 },
                 scales: {
-                    x: { stacked: true, grid: { display: false } },
+                    x: {
+                        stacked: true,
+                        grid: { display: false },
+                        ticks: { color: '#c9c9d1' }
+                    },
                     y: {
                         stacked: true,
                         max: 100,
-                        grid: { color: '#1f1f23' },
-                        ticks: { callback: value => value + '%' }
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: {
+                            callback: value => value + '%',
+                            color: '#c9c9d1'
+                        }
                     }
                 }
             }
@@ -284,9 +311,13 @@ function initAndUpdateRiskChart() {
                 datasets: [{
                     label: 'Anlageklassen',
                     data: data,
-                    backgroundColor: '#d4a574',
+                    backgroundColor: '#d4af37',
+                    borderColor: '#f4d03f',
+                    borderWidth: 2,
                     pointRadius: 10,
-                    pointHoverRadius: 14
+                    pointHoverRadius: 14,
+                    pointHoverBackgroundColor: '#f4d03f',
+                    pointHoverBorderColor: '#d4af37'
                 }]
             },
             options: {
@@ -305,14 +336,16 @@ function initAndUpdateRiskChart() {
                 },
                 scales: {
                     x: {
-                        title: { display: true, text: 'Risiko (Volatilität %)', color: '#a1a1aa' },
-                        grid: { color: '#1f1f23' },
+                        title: { display: true, text: 'Risiko (Volatilität %)', color: '#c9c9d1' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#c9c9d1' },
                         min: 0,
                         max: 35
                     },
                     y: {
-                        title: { display: true, text: 'Erwartete Rendite (%)', color: '#a1a1aa' },
-                        grid: { color: '#1f1f23' },
+                        title: { display: true, text: 'Erwartete Rendite (%)', color: '#c9c9d1' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#c9c9d1' },
                         min: 0,
                         max: 20
                     }
@@ -357,23 +390,23 @@ function initAndUpdateInterestLossChart() {
                 datasets: [{
                     label: '0.00% Zins (typische Grossbank)',
                     data: noInterestReal,
-                    borderColor: '#f87171',
-                    backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
                     fill: true,
                     tension: 0.4,
                     borderWidth: 3
                 }, {
                     label: '0.50% Zins (Alternative Bank)',
                     data: lowInterestReal,
-                    borderColor: '#d4a574',
-                    backgroundColor: 'rgba(212, 165, 116, 0.1)',
+                    borderColor: '#d4af37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.15)',
                     fill: true,
                     tension: 0.4,
                     borderWidth: 3
                 }, {
                     label: 'Nominaler Wert (ohne Inflation)',
                     data: years.map(() => initialAmount),
-                    borderColor: '#71717a',
+                    borderColor: '#8a8a98',
                     backgroundColor: 'transparent',
                     borderDash: [5, 5],
                     fill: false,
@@ -388,7 +421,7 @@ function initAndUpdateInterestLossChart() {
                     legend: {
                         display: true,
                         position: 'top',
-                        labels: { color: '#a1a1aa', padding: 15, font: { size: 12 } }
+                        labels: { color: '#c9c9d1', padding: 15, font: { size: 12 } }
                     },
                     tooltip: {
                         callbacks: {
@@ -401,11 +434,17 @@ function initAndUpdateInterestLossChart() {
                     }
                 },
                 scales: {
-                    x: { grid: { color: '#1f1f23' }, ticks: { color: '#a1a1aa' } },
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#c9c9d1' }
+                    },
                     y: {
-                        title: { display: true, text: 'Reale Kaufkraft (CHF)', color: '#a1a1aa' },
-                        grid: { color: '#1f1f23' },
-                        ticks: { color: '#a1a1aa', callback: value => `CHF ${value.toLocaleString('de-CH')}` },
+                        title: { display: true, text: 'Reale Kaufkraft (CHF)', color: '#c9c9d1' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: {
+                            color: '#c9c9d1',
+                            callback: value => `CHF ${value.toLocaleString('de-CH')}`
+                        },
                         min: 6000,
                         max: 11000
                     }

@@ -25,7 +25,8 @@ const Router = {
         'investieren': 'investieren',
         'arten': 'arten',
         'p2p': 'p2p',
-        'risiko': 'risiko'
+        'risiko': 'risiko',
+        'autorechner': 'autorechner'
     },
 
     // Initialize router
@@ -90,6 +91,9 @@ const Router = {
             // Destroy existing charts before loading new page
             if (typeof destroyCharts === 'function') {
                 destroyCharts();
+            }
+            if (typeof destroyCarChart === 'function') {
+                destroyCarChart();
             }
 
             // Get content (from cache or fetch)
@@ -181,6 +185,13 @@ const Router = {
             // Small delay to ensure DOM is ready
             setTimeout(() => {
                 updateCharts();
+            }, 100);
+        }
+
+        // Initialize car calculator if on that page
+        if (typeof initCarCalculator === 'function') {
+            setTimeout(() => {
+                initCarCalculator();
             }, 100);
         }
     },
