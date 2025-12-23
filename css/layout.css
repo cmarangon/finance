@@ -1,0 +1,320 @@
+/* Layout & Structure */
+
+/* Navigation */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    z-index: 1000;
+    background: rgba(13, 13, 18, 0.7);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-right: 1px solid var(--border);
+    padding: 2rem 1.25rem;
+    transition: var(--transition-medium);
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+}
+
+nav.scrolled {
+    background: rgba(13, 13, 18, 0.85);
+    border-right-color: var(--border-accent);
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    list-style: none;
+}
+
+nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.875rem 1.125rem;
+    border-radius: 12px;
+    transition: all var(--transition-fast);
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+nav a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+
+nav a:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+    transform: translateX(4px);
+}
+
+nav a:hover::before {
+    opacity: 0.5;
+}
+
+nav a.active {
+    color: var(--text-primary);
+    background: var(--accent-subtle);
+    border: 1px solid var(--border-accent);
+}
+
+nav a.active::before {
+    opacity: 1;
+}
+
+/* Sections */
+section {
+    padding: 8rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 4rem;
+}
+
+.section-header p {
+    font-size: 1.125rem;
+}
+
+/* Cards Grid - Bento Style */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+}
+
+/* Feature List */
+.feature-list {
+    list-style: none;
+    margin-top: 1.5rem;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.feature-list li:last-child {
+    border-bottom: none;
+}
+
+.feature-list svg {
+    flex-shrink: 0;
+    color: var(--accent-primary);
+    margin-top: 0.25rem;
+}
+
+/* Stats */
+.stat {
+    text-align: center;
+    padding: 2rem;
+}
+
+.stat-value {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 600;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+/* Info Box */
+.info-box {
+    background: var(--accent-subtle);
+    border-left: 3px solid transparent;
+    border-image: var(--accent-gradient) 1;
+    padding: 1.5rem 2rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.5rem 0;
+}
+
+.info-box p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Comparison Grid */
+.comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.comparison-item {
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.comparison-item.negative {
+    border-color: rgba(248, 113, 113, 0.3);
+    background: rgba(248, 113, 113, 0.05);
+}
+
+.comparison-item.positive {
+    border-color: rgba(74, 222, 128, 0.3);
+    background: rgba(74, 222, 128, 0.05);
+}
+
+.comparison-item h5 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.comparison-item.negative h5 {
+    color: var(--danger);
+}
+
+.comparison-item.positive h5 {
+    color: var(--success);
+}
+
+/* Progress Steps */
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    transition: var(--transition-medium);
+}
+
+.step:hover {
+    border-color: var(--border-accent);
+    background: var(--bg-tertiary);
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    background: var(--accent-gradient);
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.step-content h5 {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.step-content p {
+    margin: 0;
+    font-size: 0.9375rem;
+}
+
+/* Charts */
+.chart-container {
+    position: relative;
+    height: 350px;
+    margin: 1.5rem 0;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .card-sm, .card-md, .card-lg {
+        grid-column: span 6;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        margin-left: 0;
+    }
+
+    nav {
+        width: 100%;
+        height: auto;
+        bottom: auto;
+        top: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        padding: 1rem;
+        overflow-x: auto;
+        overflow-y: visible;
+    }
+
+    nav ul {
+        flex-direction: row;
+        gap: 0.25rem;
+        overflow-x: auto;
+    }
+
+    nav a {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        white-space: nowrap;
+    }
+
+    section {
+        padding: 5rem 1.5rem;
+    }
+
+    .card-sm, .card-md, .card-lg, .card-full {
+        grid-column: span 12;
+    }
+
+    .comparison {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+        height: 280px;
+    }
+}

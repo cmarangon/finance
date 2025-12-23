@@ -1,0 +1,266 @@
+<!-- Section 6: Die Zinswüste -->
+<section id="zinswueste">
+    <div class="section-header">
+        <h4>Kapitel 06</h4>
+        <h2>Die Zinswüste</h2>
+        <p>Warum dein Geld auf dem Sparkonto jeden Tag an Wert verliert – und was du dagegen tun kannst.</p>
+    </div>
+
+    <div class="bento-grid">
+        <div class="card card-sm">
+            <div class="stat">
+                <div class="stat-value" style="color: var(--danger);">0.00%</div>
+                <div class="stat-label">Durchschnittszins der grossen Banken</div>
+            </div>
+        </div>
+
+        <div class="card card-sm">
+            <div class="stat">
+                <div class="stat-value" style="color: var(--danger);">-2%</div>
+                <div class="stat-label">Reale Rendite (nach Inflation)</div>
+            </div>
+        </div>
+
+        <div class="card card-full">
+            <h3>Das Problem: Schleichender Kaufkraftverlust</h3>
+            <p>Die meisten grossen Banken bieten auf ihren Sparkonten praktisch keine Zinsen mehr. Gleichzeitig liegt die Inflation bei etwa 2% pro Jahr. Das bedeutet: <strong>Dein Geld verliert jedes Jahr an Kaufkraft – auch wenn der nominale Betrag gleich bleibt.</strong></p>
+
+            <div class="info-box" style="margin-top: 1.5rem; background: rgba(248, 113, 113, 0.1); border-color: var(--danger);">
+                <p><strong>Konkret:</strong> CHF 10'000 auf einem Sparkonto mit 0% Zins haben nach 10 Jahren bei 2% Inflation nur noch die Kaufkraft von ca. CHF 8'200. Du hast real CHF 1'800 verloren – ohne dass du es merkst!</p>
+            </div>
+        </div>
+
+        <div class="card card-md">
+            <h3>Historischer Vergleich</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Zeitraum</th>
+                            <th>Durchschnittszins</th>
+                            <th>Inflation</th>
+                            <th>Reale Rendite</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: rgba(134, 239, 172, 0.1);">
+                            <td>1990-2000</td>
+                            <td style="color: var(--success);">~4.0%</td>
+                            <td>~2.5%</td>
+                            <td style="color: var(--success);">+1.5%</td>
+                        </tr>
+                        <tr style="background: rgba(134, 239, 172, 0.05);">
+                            <td>2000-2010</td>
+                            <td style="color: var(--success);">~2.0%</td>
+                            <td>~1.0%</td>
+                            <td style="color: var(--success);">+1.0%</td>
+                        </tr>
+                        <tr style="background: rgba(251, 191, 36, 0.1);">
+                            <td>2010-2020</td>
+                            <td style="color: var(--warning);">~0.5%</td>
+                            <td>~0.5%</td>
+                            <td>±0.0%</td>
+                        </tr>
+                        <tr style="background: rgba(248, 113, 113, 0.1);">
+                            <td>2020-2025</td>
+                            <td style="color: var(--danger);">~0.0%</td>
+                            <td>~2.0%</td>
+                            <td style="color: var(--danger);">-2.0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Früher konnte man mit einem Sparkonto sogar Geld verdienen. Heute verlierst du garantiert Kaufkraft.</p>
+        </div>
+
+        <div class="card card-md">
+            <h3>Warum ist das so?</h3>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h5>Negativzinspolitik der Nationalbank</h5>
+                        <p>Die Nationalbank hatte jahrelang Negativzinsen, um den Franken zu schwächen. Die Banken gaben diese nicht an Privatkunden weiter.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h5>Hohe Gewinnmargen</h5>
+                        <p>Banken verdienen ihr Geld mit dem Zinsunterschied: Sie zahlen dir 0%, verleihen dein Geld aber zu 5% Hypothekenzins weiter.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h5>Mangelnder Wettbewerb</h5>
+                        <p>Viele Menschen wechseln ihre Bank nicht, auch wenn die Zinsen miserabel sind. Ohne Druck bleiben die Zinsen niedrig.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-full">
+            <h3>Der reale Verlust: Eine Rechnung</h3>
+            <div class="chart-container">
+                <canvas id="interestLossChart"></canvas>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Die Grafik zeigt, wie sich CHF 10'000 über 20 Jahre entwickeln – bei 0% Zins vs. 0.50% Zins, jeweils inflationsbereinigt (2% Inflation angenommen).</p>
+        </div>
+
+        <div class="card card-full">
+            <h3>Was bedeutet das konkret für dich?</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Anfangsbetrag</th>
+                            <th>Nach 10 Jahren nominal</th>
+                            <th>Nach 10 Jahren real*</th>
+                            <th>Verlust</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CHF 5'000</td>
+                            <td>CHF 5'000</td>
+                            <td style="color: var(--danger);">CHF 4'100</td>
+                            <td style="color: var(--danger);">-CHF 900</td>
+                        </tr>
+                        <tr>
+                            <td>CHF 10'000</td>
+                            <td>CHF 10'000</td>
+                            <td style="color: var(--danger);">CHF 8'200</td>
+                            <td style="color: var(--danger);">-CHF 1'800</td>
+                        </tr>
+                        <tr>
+                            <td>CHF 25'000</td>
+                            <td>CHF 25'000</td>
+                            <td style="color: var(--danger);">CHF 20'500</td>
+                            <td style="color: var(--danger);">-CHF 4'500</td>
+                        </tr>
+                        <tr>
+                            <td>CHF 50'000</td>
+                            <td>CHF 50'000</td>
+                            <td style="color: var(--danger);">CHF 41'000</td>
+                            <td style="color: var(--danger);">-CHF 9'000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">* Realer Wert = inflationsbereinigt, also was du tatsächlich noch kaufen kannst. Bei 0% Zins und 2% Inflation.</p>
+        </div>
+
+        <div class="card card-full">
+            <h3>Banken im Vergleich</h3>
+            <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1rem;">
+                <strong>Letzte Aktualisierung:</strong> Dezember 2025
+            </p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bank</th>
+                            <th>Kontotyp</th>
+                            <th>Zinssatz p.a.</th>
+                            <th>Besonderheiten</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: rgba(248, 113, 113, 0.1);">
+                            <td><strong><a href="https://www.yuh.com/de/pricing/" target="_blank" style="color: var(--accent);">Yuh</a></strong></td>
+                            <td>Sparkonto</td>
+                            <td style="color: var(--danger); font-weight: 700;">0.00%*</td>
+                            <td>Keine Zinsen! Nur für Investment-Features geeignet</td>
+                        </tr>
+                        <tr style="background: rgba(248, 113, 113, 0.1);">
+                            <td><strong><a href="https://www.postfinance.ch/de/privat/zahlen-sparen/konten/sparkonto.html" target="_blank" style="color: var(--accent);">Postfinance</a></strong></td>
+                            <td>e-Sparkonto</td>
+                            <td style="color: var(--danger); font-weight: 700;">0.00%*</td>
+                            <td>Staatlich, sehr sicher - aber keine Zinsen!</td>
+                        </tr>
+                        <tr style="background: rgba(248, 113, 113, 0.1);">
+                            <td><strong><a href="https://www.raiffeisen.ch/grauholz/de/privatkunden/konten-und-bezahlen/sparkonto.html#conditionsitem_78697655458525" target="_blank" style="color: var(--accent);">Raiffeisen</a></strong></td>
+                            <td>Sparkonto</td>
+                            <td style="color: var(--danger); font-weight: 700;">0.025%*<br>(0.05% für Mitglieder)</td>
+                            <td>Genossenschaftsbank - extrem niedrige Zinsen!</td>
+                        </tr>
+                        <tr style="background: rgba(248, 113, 113, 0.1);">
+                            <td><strong><a href="https://www.zkb.ch/de/private/konten-karten/sparkonten/sparkonto.html" target="_blank" style="color: var(--accent);">ZKB</a></strong></td>
+                            <td>Sparkonto</td>
+                            <td style="color: var(--danger); font-weight: 700;">0.05%* (bis CHF 25k)<br>danach 0%</td>
+                            <td>Staatsgarantie - extrem niedrige Zinsen!</td>
+                        </tr>
+                        <tr style="background: rgba(248, 113, 113, 0.1);">
+                            <td><strong><a href="https://www.ubs.com/ch/de/services/accounts-and-cards/interest-rates-privates.html" target="_blank" style="color: var(--accent);">UBS</a></strong></td>
+                            <td>Sparkonto</td>
+                            <td style="color: var(--danger); font-weight: 700;">0.05%* (bis CHF 50k)<br>0.01% (darüber)</td>
+                            <td>Grossbank - extrem niedrige Zinsen + Gebühren!</td>
+                        </tr>
+                        <tr>
+                            <td><strong><a href="https://www.abs.ch/de/konditionen-fuer-privatpersonen#sparkonto" target="_blank" style="color: var(--accent);">Alternative Bank</a></strong></td>
+                            <td>Sparkonto</td>
+                            <td class="highlight">0.50%*</td>
+                            <td>Nachhaltig, ethische Investments - beste Zinsen!</td>
+                        </tr>
+                        <tr style="background: rgba(248, 113, 113, 0.1);">
+                            <td><strong><a href="https://www.bekb.ch/de/privatkunden/sparen-und-vorsorgen" target="_blank" style="color: var(--accent);">BEKB</a></strong></td>
+                            <td>Sparkonto</td>
+                            <td style="color: var(--danger); font-weight: 700;">0.05%* (bis CHF 50k)<br>danach 0%</td>
+                            <td>Staatsgarantie - extrem niedrige Zinsen!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="info-box" style="margin-top: 1.5rem; background: rgba(248, 113, 113, 0.1); border-color: var(--danger);">
+                <p><strong>Warnung:</strong> Viele Banken zahlen auf Sparkonten nur noch minimale oder gar keine Zinsen! Bei 2% Inflation verlierst du mit 0% Zins jährlich Kaufkraft. Vergleiche unbedingt die Konditionen verschiedener Banken!</p>
+            </div>
+            <div class="info-box" style="margin-top: 1rem;">
+                <p><strong>* Hinweis:</strong> Zinssätze ändern sich regelmässig. Die angegebenen Werte sind Richtwerte (Stand Dezember 2025) und können je nach Bank und Kontosaldo variieren. Klicke auf die Banknamen für aktuelle Konditionen!</p>
+            </div>
+            <div class="info-box" style="margin-top: 1rem;">
+                <p><strong>Tipp:</strong> Einige Banken haben Staatsgarantie – besonders sicher für grosse Beträge. Vergleiche aber unbedingt die Zinsen, da diese stark variieren können (0% bis 0.75%).</p>
+            </div>
+        </div>
+
+        <div class="card card-md">
+            <h3>Was kannst du tun?</h3>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h5>Bank wechseln</h5>
+                        <p>Wechsle zu einer Bank mit höheren Zinsen (siehe <a href="#notgroschen" data-link style="color: var(--accent);">Kapitel 05</a>). Alternative Bank bietet 0.50% statt 0.00%.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h5>Nur Notgroschen auf Sparkonto</h5>
+                        <p>Halte nur 3-6 Monatsausgaben als Notgroschen liquide. Alles darüber sollte arbeiten.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h5>Investieren statt Sparen</h5>
+                        <p>Langfristiges Geld gehört in Aktien/ETFs (siehe <a href="#investieren" data-link style="color: var(--accent);">Kapitel 08</a>). Historisch ~7% Rendite p.a.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h5>Säule 3a nutzen</h5>
+                        <p>Steuervorteil + bessere Rendite durch Wertschriftenlösungen (siehe <a href="#vorsorge" data-link style="color: var(--accent);">Kapitel 07</a>).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-full" style="background: linear-gradient(135deg, var(--card-bg) 0%, rgba(212, 175, 55, 0.1) 100%); border: 2px solid var(--accent);">
+            <h3 style="color: var(--accent);">Die Kernbotschaft</h3>
+            <p style="font-size: 1.1rem; line-height: 1.6;">Dein Geld auf einem 0%-Sparkonto zu lassen ist keine sichere, konservative Strategie – es ist die Garantie, dass du jedes Jahr Kaufkraft verlierst. <strong>Echte finanzielle Sicherheit entsteht nicht durch Nichtstun, sondern durch kluge Allokation deines Vermögens.</strong></p>
+            <p style="margin-top: 1rem;">Wechsle zu einer Bank mit besseren Konditionen, halte nur den Notgroschen liquide, und investiere den Rest langfristig. So schützt du dein Geld vor der Inflation und baust echtes Vermögen auf.</p>
+        </div>
+    </div>
+</section>

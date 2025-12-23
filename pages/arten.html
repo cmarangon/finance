@@ -1,0 +1,102 @@
+<!-- Section 9: Anlagearten -->
+<section id="arten">
+    <div class="section-header">
+        <h4>Kapitel 09</h4>
+        <h2>Anlagearten im Überblick</h2>
+        <p>Von risikoarm bis spekulativ – verstehe die verschiedenen Anlageklassen.</p>
+    </div>
+
+    <div class="bento-grid">
+        <div class="card card-sm">
+            <h4>Risikoarm</h4>
+            <h3>Obligationen</h3>
+            <p><span class="term">Festverzinsliche Wertpapiere<span class="tooltip">Anleihen mit festem Zinssatz – du leihst Geld an Staaten oder Unternehmen</span></span> mit planbaren Erträgen.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Rendite: 2-4%
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Volatilität: Niedrig
+                </li>
+            </ul>
+        </div>
+
+        <div class="card card-sm">
+            <h4>Ausgewogen</h4>
+            <h3>Aktien & ETFs</h3>
+            <p>Unternehmensanteile mit Wachstumspotential und <span class="term">Dividenden<span class="tooltip">Gewinnausschüttungen von Unternehmen an Aktionäre</span></span>.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Rendite: 5-10%
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Volatilität: Mittel-Hoch
+                </li>
+            </ul>
+        </div>
+
+        <div class="card card-sm">
+            <h4>Substanzwert</h4>
+            <h3>Immobilien</h3>
+            <p>Sachwerte mit Mieteinnahmen und potentieller Wertsteigerung.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Rendite: 3-6%
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Volatilität: Niedrig
+                </li>
+            </ul>
+        </div>
+
+        <div class="card card-sm">
+            <h4>Alternativ</h4>
+            <h3>P2P-Kredite</h3>
+            <p>Direktes Verleihen an Privatpersonen über Online-Plattformen.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Rendite: 5-12%
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Volatilität: Mittel-Hoch
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Risiko: Ausfallrisiko
+                </li>
+            </ul>
+        </div>
+
+        <div class="card card-sm">
+            <h4>Spekulativ</h4>
+            <h3>Rohstoffe & Crypto</h3>
+            <p>Hochvolatile Anlagen ohne regelmässige Erträge.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Rendite: Unvorhersehbar
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Volatilität: Sehr hoch
+                </li>
+            </ul>
+        </div>
+
+        <div class="card card-full">
+            <h3>Asset Allocation nach Alter</h3>
+            <p>Die <span class="term">Faustregel<span class="tooltip">100 minus Alter = Aktienquote in Prozent. Mit 30 also 70% Aktien, mit 60 noch 40%</span></span>: 100 minus Alter = empfohlene Aktienquote</p>
+            <div class="chart-container">
+                <canvas id="allocationChart"></canvas>
+            </div>
+        </div>
+    </div>
+</section>

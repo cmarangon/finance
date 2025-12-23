@@ -1,0 +1,62 @@
+/* Range Input/Slider Styles */
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    padding: 0;
+    border: 1px solid var(--border);
+    width: 100%;
+}
+
+/* WebKit Browsers (Chrome, Safari, Edge) */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--accent-glow);
+    border: 2px solid var(--bg-primary);
+    transition: var(--transition-fast);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 16px var(--accent-glow);
+}
+
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--accent-gradient);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--bg-primary);
+    box-shadow: 0 4px 12px var(--accent-glow);
+    transition: var(--transition-fast);
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 16px var(--accent-glow);
+}
+
+/* Focus States */
+input[type="range"]:focus {
+    outline: none;
+    border-color: var(--border-accent);
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px var(--accent-subtle), 0 6px 16px var(--accent-glow);
+}
+
+input[type="range"]:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 4px var(--accent-subtle), 0 6px 16px var(--accent-glow);
+}

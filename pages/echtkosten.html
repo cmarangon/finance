@@ -1,0 +1,85 @@
+<!-- Section 2: Echtkosten -->
+<section id="echtkosten">
+    <div class="section-header">
+        <h4>Kapitel 02</h4>
+        <h2>Echtkosten richtig rechnen</h2>
+        <p>Der Kaufpreis ist nur die Spitze des Eisbergs. Die wahren Kosten einer Anschaffung zeigen sich erst über die Zeit.</p>
+    </div>
+
+    <div class="bento-grid">
+        <div class="card card-md">
+            <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+            </div>
+            <h3>Die TCO-Formel</h3>
+            <p>Die <span class="term">Total Cost of Ownership<span class="tooltip">Gesamtbetriebskosten über die gesamte Nutzungsdauer eines Produkts</span></span> berücksichtigt alle Kosten über die gesamte Lebensdauer.</p>
+            <ul class="feature-list">
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Anschaffungspreis
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Betriebskosten (Strom, Verbrauch, Wartung)
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    Reparaturen und Ersatzteile
+                </li>
+                <li>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <span class="term">Opportunitätskosten<span class="tooltip">Entgangener Nutzen durch nicht gewählte Alternativen (z.B. verpasste Rendite)</span></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card card-md">
+            <div class="card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                </svg>
+            </div>
+            <h3>Beispiel: Auto</h3>
+            <p>Ein Auto für CHF 30'000 kostet über 5 Jahre erheblich mehr als der Kaufpreis.</p>
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <td>Kaufpreis</td>
+                        <td class="highlight">CHF 30'000</td>
+                    </tr>
+                    <tr>
+                        <td>Wertverlust (5 Jahre)</td>
+                        <td>CHF 15'000</td>
+                    </tr>
+                    <tr>
+                        <td>Versicherung</td>
+                        <td>CHF 7'500</td>
+                    </tr>
+                    <tr>
+                        <td>Treibstoff</td>
+                        <td>CHF 9'000</td>
+                    </tr>
+                    <tr>
+                        <td>Service & Reparaturen</td>
+                        <td>CHF 5'000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total 5 Jahre</strong></td>
+                        <td class="highlight"><strong>CHF 66'500</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card card-full">
+            <h3>Zeitwert des Geldes</h3>
+            <p>Der <span class="term">Zinseszins<span class="tooltip">Zinsen auf bereits verdiente Zinsen – der Haupttreiber langfristigen Vermögensaufbaus</span></span> ist der mächtigste Effekt bei langfristigen Finanzen. CHF 10'000 heute sind mehr wert als CHF 10'000 in 10 Jahren.</p>
+            <div class="chart-container">
+                <canvas id="compoundChart"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
