@@ -2,6 +2,8 @@
 // Compares wealth development over time for different car financing options
 
 let carComparisonChart = null;
+let currentChartView = 'overview';
+let lastCalculationData = null;
 
 // Initialize car calculator when the page loads
 function initCarCalculator() {
@@ -30,9 +32,30 @@ function initCarCalculator() {
         }
     });
 
+    // Initialize tab clicks
+    initChartTabs();
+
     // Initial calculation
     updateCarDisplays(inputs);
     calculateCarComparison(inputs);
+}
+
+// Initialize chart tab functionality
+function initChartTabs() {
+    const tabs = document.querySelectorAll('.chart-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Update active state
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Switch chart view
+            currentChartView = tab.dataset.view;
+            if (lastCalculationData) {
+                renderChart(lastCalculationData);
+            }
+        });
+    });
 }
 
 // Update display values for sliders
@@ -73,8 +96,16 @@ function calculateCarComparison(inputs) {
     // Update results display
     updateResults(barkaufData, leasingData, kreditData, duration, carValueAtEnd);
 
+    // Store data for chart rendering
+    lastCalculationData = {
+        barkauf: barkaufData,
+        leasing: leasingData,
+        kredit: kreditData,
+        duration: duration
+    };
+
     // Update chart
-    updateCarChart(barkaufData, leasingData, kreditData, duration);
+    renderChart(lastCalculationData);
 }
 
 // Calculate car value after depreciation
@@ -111,7 +142,7 @@ function calculateBarkauf(availableMoney, carPrice, duration, monthlyReturn, car
     // Can't afford cash purchase
     if (invested < 0) {
         for (let m = 0; m <= duration; m++) {
-            data.push({ month: m, wealth: 0 });
+            data.push({ month: m, wealth: 0, portfolio: 0, carValue: 0 });
         }
         return { monthlyData: data, finalWealth: 0, totalCost: carPrice };
     }
@@ -120,7 +151,12 @@ function calculateBarkauf(availableMoney, carPrice, duration, monthlyReturn, car
         const carValue = calculateCarValue(carPrice, m);
         const portfolioValue = invested * Math.pow(1 + monthlyReturn, m);
         const totalWealth = portfolioValue + carValue;
-        data.push({ month: m, wealth: Math.round(totalWealth) });
+        data.push({
+            month: m,
+            wealth: Math.round(totalWealth),
+            portfolio: Math.round(portfolioValue),
+            carValue: Math.round(carValue)
+        });
     }
 
     const finalWealth = data[data.length - 1].wealth;
@@ -141,14 +177,21 @@ function calculateLeasing(availableMoney, carPrice, duration, interestRate, mont
     const monthlyPayment = (depreciationCost + totalInterest) / duration;
 
     let portfolio = availableMoney;
+    let totalPaid = 0;
 
     for (let m = 0; m <= duration; m++) {
         if (m > 0) {
             // Grow portfolio, then pay lease
             portfolio = portfolio * (1 + monthlyReturn) - monthlyPayment;
+            totalPaid += monthlyPayment;
         }
         // Leasing: no car ownership, so wealth = portfolio only
-        data.push({ month: m, wealth: Math.round(Math.max(0, portfolio)) });
+        data.push({
+            month: m,
+            wealth: Math.round(Math.max(0, portfolio)),
+            portfolio: Math.round(Math.max(0, portfolio)),
+            totalPaid: Math.round(totalPaid)
+        });
     }
 
     const finalWealth = Math.max(0, data[data.length - 1].wealth);
@@ -191,7 +234,13 @@ function calculateKredit(availableMoney, carPrice, duration, interestRate, month
 
         // Total wealth = portfolio + car value - remaining debt
         const totalWealth = Math.max(0, portfolio) + carValue - remainingDebt;
-        data.push({ month: m, wealth: Math.round(totalWealth) });
+        data.push({
+            month: m,
+            wealth: Math.round(totalWealth),
+            portfolio: Math.round(Math.max(0, portfolio)),
+            carValue: Math.round(carValue),
+            debt: Math.round(remainingDebt)
+        });
     }
 
     const finalWealth = data[data.length - 1].wealth;
@@ -254,105 +303,284 @@ function updateResults(barkauf, leasing, kredit, duration, carValueAtEnd) {
     }
 }
 
-// Update the comparison chart
-function updateCarChart(barkauf, leasing, kredit, duration) {
+// Main chart rendering function - switches between views
+function renderChart(data) {
+    // Destroy existing chart before creating new one
+    if (carComparisonChart) {
+        carComparisonChart.destroy();
+        carComparisonChart = null;
+    }
+
     const canvas = document.getElementById('carComparisonChart');
     if (!canvas) return;
 
-    // Create labels (every 6 months)
-    const labels = [];
-    const barkaufData = [];
-    const leasingData = [];
-    const kreditData = [];
+    switch (currentChartView) {
+        case 'barkauf':
+            renderStackedChart(canvas, data, 'barkauf');
+            break;
+        case 'leasing':
+            renderStackedChart(canvas, data, 'leasing');
+            break;
+        case 'kredit':
+            renderStackedChart(canvas, data, 'kredit');
+            break;
+        default:
+            renderOverviewChart(canvas, data);
+    }
+}
 
+// Create labels for charts
+function createChartLabels(duration) {
+    const labels = [];
     for (let m = 0; m <= duration; m += 3) {
         labels.push(m === 0 ? 'Start' : `${m} Mt.`);
-        barkaufData.push(barkauf.monthlyData[m]?.wealth || 0);
-        leasingData.push(leasing.monthlyData[m]?.wealth || 0);
-        kreditData.push(kredit.monthlyData[m]?.wealth || 0);
     }
-
-    // Add final point if not already included
     if (duration % 3 !== 0) {
         labels.push(`${duration} Mt.`);
-        barkaufData.push(barkauf.finalWealth);
-        leasingData.push(leasing.finalWealth);
-        kreditData.push(kredit.finalWealth);
+    }
+    return labels;
+}
+
+// Get data points at 3-month intervals
+function getDataPoints(monthlyData, duration, property) {
+    const points = [];
+    for (let m = 0; m <= duration; m += 3) {
+        points.push(monthlyData[m]?.[property] || 0);
+    }
+    if (duration % 3 !== 0) {
+        points.push(monthlyData[duration]?.[property] || 0);
+    }
+    return points;
+}
+
+// Render the overview comparison chart
+function renderOverviewChart(canvas, data) {
+    const { barkauf, leasing, kredit, duration } = data;
+    const labels = createChartLabels(duration);
+
+    const ctx = canvas.getContext('2d');
+    carComparisonChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Barkauf',
+                data: getDataPoints(barkauf.monthlyData, duration, 'wealth'),
+                borderColor: '#22c55e',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3
+            }, {
+                label: 'Leasing',
+                data: getDataPoints(leasing.monthlyData, duration, 'wealth'),
+                borderColor: '#f59e0b',
+                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3
+            }, {
+                label: 'Kredit',
+                data: getDataPoints(kredit.monthlyData, duration, 'wealth'),
+                borderColor: '#ef4444',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3
+            }]
+        },
+        options: getChartOptions('Gesamtvermögen über Zeit')
+    });
+}
+
+// Render stacked chart for individual option
+function renderStackedChart(canvas, data, option) {
+    const { duration } = data;
+    const optionData = data[option];
+    const labels = createChartLabels(duration);
+    const ctx = canvas.getContext('2d');
+
+    let datasets = [];
+    let title = '';
+
+    if (option === 'barkauf') {
+        title = 'Barkauf - Vermögensaufbau';
+        datasets = [{
+            label: 'Portfolio',
+            data: getDataPoints(optionData.monthlyData, duration, 'portfolio'),
+            backgroundColor: 'rgba(34, 197, 94, 0.8)',
+            borderColor: '#22c55e',
+            borderWidth: 2,
+            fill: true,
+            order: 2
+        }, {
+            label: 'Auto-Wert',
+            data: getDataPoints(optionData.monthlyData, duration, 'carValue'),
+            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+            borderColor: '#3b82f6',
+            borderWidth: 2,
+            fill: true,
+            order: 1
+        }];
+    } else if (option === 'leasing') {
+        title = 'Leasing - Vermögensaufbau';
+        // For leasing, show portfolio and cumulative payments
+        const portfolioData = getDataPoints(optionData.monthlyData, duration, 'portfolio');
+        const paidData = getDataPoints(optionData.monthlyData, duration, 'totalPaid');
+
+        datasets = [{
+            label: 'Portfolio',
+            data: portfolioData,
+            backgroundColor: 'rgba(245, 158, 11, 0.8)',
+            borderColor: '#f59e0b',
+            borderWidth: 2,
+            fill: true,
+            order: 2
+        }, {
+            label: 'Bezahlte Raten (kein Gegenwert)',
+            data: paidData,
+            backgroundColor: 'rgba(239, 68, 68, 0.4)',
+            borderColor: '#ef4444',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            fill: false,
+            order: 1
+        }];
+    } else if (option === 'kredit') {
+        title = 'Kredit - Vermögensaufbau';
+        const portfolioData = getDataPoints(optionData.monthlyData, duration, 'portfolio');
+        const carData = getDataPoints(optionData.monthlyData, duration, 'carValue');
+        const debtData = getDataPoints(optionData.monthlyData, duration, 'debt').map(d => -d);
+
+        datasets = [{
+            label: 'Portfolio',
+            data: portfolioData,
+            backgroundColor: 'rgba(34, 197, 94, 0.8)',
+            borderColor: '#22c55e',
+            borderWidth: 2,
+            stack: 'positive',
+            order: 3
+        }, {
+            label: 'Auto-Wert',
+            data: carData,
+            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+            borderColor: '#3b82f6',
+            borderWidth: 2,
+            stack: 'positive',
+            order: 2
+        }, {
+            label: 'Restschuld',
+            data: debtData,
+            backgroundColor: 'rgba(239, 68, 68, 0.8)',
+            borderColor: '#ef4444',
+            borderWidth: 2,
+            stack: 'negative',
+            order: 1
+        }];
     }
 
-    if (!carComparisonChart) {
-        const ctx = canvas.getContext('2d');
-        carComparisonChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Barkauf',
-                    data: barkaufData,
-                    borderColor: '#22c55e',
-                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3
-                }, {
-                    label: 'Leasing',
-                    data: leasingData,
-                    borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3
-                }, {
-                    label: 'Kredit',
-                    data: kreditData,
-                    borderColor: '#ef4444',
-                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3
-                }]
+    carComparisonChart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets },
+        options: getStackedChartOptions(title, option)
+    });
+}
+
+// Chart options for overview
+function getChartOptions(title) {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            intersect: false,
+            mode: 'index'
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { padding: 20, color: '#c9c9d1' }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { padding: 20, color: '#c9c9d1' }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: context => `${context.dataset.label}: CHF ${context.parsed.y.toLocaleString('de-CH')}`
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                        ticks: {
-                            callback: value => `CHF ${(value / 1000).toFixed(0)}k`,
-                            color: '#c9c9d1'
-                        }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#c9c9d1' }
+            title: {
+                display: true,
+                text: title,
+                color: '#c9c9d1',
+                font: { size: 14 }
+            },
+            tooltip: {
+                callbacks: {
+                    label: context => `${context.dataset.label}: CHF ${context.parsed.y.toLocaleString('de-CH')}`
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: false,
+                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                ticks: {
+                    callback: value => `CHF ${(value / 1000).toFixed(0)}k`,
+                    color: '#c9c9d1'
+                }
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: '#c9c9d1' }
+            }
+        }
+    };
+}
+
+// Chart options for stacked charts
+function getStackedChartOptions(title, option) {
+    const isKredit = option === 'kredit';
+
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            intersect: false,
+            mode: 'index'
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { padding: 20, color: '#c9c9d1' }
+            },
+            title: {
+                display: true,
+                text: title,
+                color: '#c9c9d1',
+                font: { size: 14 }
+            },
+            tooltip: {
+                callbacks: {
+                    label: context => {
+                        const value = Math.abs(context.parsed.y);
+                        const prefix = context.parsed.y < 0 ? '-' : '';
+                        return `${context.dataset.label}: ${prefix}CHF ${value.toLocaleString('de-CH')}`;
                     }
                 }
             }
-        });
-    } else {
-        carComparisonChart.data.labels = labels;
-        carComparisonChart.data.datasets[0].data = barkaufData;
-        carComparisonChart.data.datasets[1].data = leasingData;
-        carComparisonChart.data.datasets[2].data = kreditData;
-        carComparisonChart.update();
-    }
+        },
+        scales: {
+            y: {
+                stacked: isKredit,
+                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                ticks: {
+                    callback: value => {
+                        const absValue = Math.abs(value);
+                        const prefix = value < 0 ? '-' : '';
+                        return `${prefix}CHF ${(absValue / 1000).toFixed(0)}k`;
+                    },
+                    color: '#c9c9d1'
+                }
+            },
+            x: {
+                stacked: isKredit,
+                grid: { display: false },
+                ticks: { color: '#c9c9d1' }
+            }
+        }
+    };
 }
 
 // Destroy chart when navigating away

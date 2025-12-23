@@ -104,10 +104,18 @@
             </div>
         </div>
 
-        <!-- Chart -->
+        <!-- Chart with Tabs -->
         <div class="card card-full">
             <h3>Vermögensentwicklung über Zeit</h3>
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">Vergleich: Wie entwickelt sich dein Gesamtvermögen bei jeder Option?</p>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Klicke auf die Tabs um die Zusammensetzung jeder Option zu sehen.</p>
+
+            <div class="chart-tabs">
+                <button class="chart-tab active" data-view="overview">Vergleich</button>
+                <button class="chart-tab" data-view="barkauf">Barkauf</button>
+                <button class="chart-tab" data-view="leasing">Leasing</button>
+                <button class="chart-tab" data-view="kredit">Kredit</button>
+            </div>
+
             <div class="chart-container" style="height: 350px;">
                 <canvas id="carComparisonChart"></canvas>
             </div>
