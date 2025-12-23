@@ -1,0 +1,81 @@
+name: Deploy to Webserver
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install minification tools
+        run: |
+          npm install -g csso-cli terser html-minifier-terser
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Copy files to build
+        run: |
+          cp -r css js pages *.html build/
+
+      - name: Minify CSS files
+        run: |
+          find build/css -name "*.css" -type f -exec sh -c '
+            for file; do
+              echo "Minifying $file"
+              csso "$file" -o "$file"
+            done
+          ' sh {} +
+
+      - name: Minify JavaScript files
+        run: |
+          find build/js -name "*.js" -type f -exec sh -c '
+            for file; do
+              echo "Minifying $file"
+              terser "$file" -c -m -o "$file"
+            done
+          ' sh {} +
+
+      - name: Minify HTML files
+        run: |
+          find build -name "*.html" -type f -exec sh -c '
+            for file; do
+              echo "Minifying $file"
+              html-minifier-terser \
+                --collapse-whitespace \
+                --remove-comments \
+                --minify-css true \
+                --minify-js true \
+                "$file" -o "$file"
+            done
+          ' sh {} +
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }}" \
+            build/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}
+
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
