@@ -31,6 +31,12 @@ jobs:
         run: |
           cp -r css js pages *.html build/
 
+      - name: Update asset version with deploy timestamp
+        run: |
+          TIMESTAMP=$(date +%s)
+          echo "Using version: $TIMESTAMP"
+          sed -i "s/\?v=[0-9]*/?v=$TIMESTAMP/g" build/index.html
+
       - name: Minify CSS files
         run: |
           find build/css -name "*.css" -type f -exec sh -c '
