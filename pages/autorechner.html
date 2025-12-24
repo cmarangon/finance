@@ -41,10 +41,10 @@
 
                     <div class="input-group">
                         <label for="serviceFees">
-                            Nebenkosten
-                            <span class="value-display" id="serviceFeesDisplay">CHF 500</span>
+                            Jährliche Servicekosten
+                            <span class="value-display" id="serviceFeesDisplay">CHF 400/Jahr</span>
                         </label>
-                        <input type="range" id="serviceFees" value="500" min="0" max="2000" step="50">
+                        <input type="range" id="serviceFees" value="400" min="100" max="1500" step="50">
                     </div>
                 </div>
 
@@ -117,23 +117,15 @@
                 <!-- Barkauf Panel -->
                 <div class="comparison-panel panel-barkauf" id="panelBarkauf">
                     <div class="panel-header">
-                        <h4>💵 Barkauf</h4>
+                        <h4><span class="emoji">💵</span> Barkauf</h4>
                         <span class="panel-badge" id="barkaufBadge">Empfohlen</span>
                     </div>
                     <div class="panel-body">
                         <div class="panel-section">
                             <h5>Initialkosten</h5>
-                            <div class="breakdown-row">
+                            <div class="breakdown-row breakdown-total">
                                 <span>Kaufpreis</span>
                                 <span id="barkaufKaufpreis">CHF 35'000</span>
-                            </div>
-                            <div class="breakdown-row">
-                                <span>Nebenkosten</span>
-                                <span id="barkaufNebenkosten">CHF 500</span>
-                            </div>
-                            <div class="breakdown-row breakdown-total">
-                                <span>Total Anfangsinvestition</span>
-                                <span id="barkaufTotalInitial">CHF 35'500</span>
                             </div>
                         </div>
                         <div class="panel-section">
@@ -158,8 +150,8 @@
                                 <span class="negative" id="barkaufDepreciation">-CHF 13'000</span>
                             </div>
                             <div class="breakdown-row">
-                                <span>Nebenkosten</span>
-                                <span class="negative" id="barkaufFees">-CHF 500</span>
+                                <span>Servicekosten total</span>
+                                <span class="negative" id="barkaufServiceCosts">-CHF 1'600</span>
                             </div>
                             <div class="breakdown-row breakdown-total negative">
                                 <span>Total Kosten</span>
@@ -172,7 +164,7 @@
                 <!-- Leasing Panel -->
                 <div class="comparison-panel panel-leasing" id="panelLeasing">
                     <div class="panel-header">
-                        <h4>📋 Leasing</h4>
+                        <h4><span class="emoji">📋</span> Leasing</h4>
                         <span class="panel-badge panel-badge-warning" id="leasingBadge" style="display:none;">Kein Eigentum</span>
                     </div>
                     <div class="panel-body">
@@ -226,7 +218,7 @@
                 <!-- Kredit Panel -->
                 <div class="comparison-panel panel-kredit" id="panelKredit">
                     <div class="panel-header">
-                        <h4>🏦 Kredit</h4>
+                        <h4><span class="emoji">🏦</span> Kredit</h4>
                         <span class="panel-badge panel-badge-neutral" id="kreditBadge" style="display:none;">Alternative</span>
                     </div>
                     <div class="panel-body">
@@ -267,7 +259,7 @@
                                 <span class="negative" id="kreditDepreciation">-CHF 13'000</span>
                             </div>
                             <div class="breakdown-row">
-                                <span>Zinsen + Nebenkosten</span>
+                                <span>Zinsen + Servicekosten</span>
                                 <span class="negative" id="kreditFeesAndInterest">-CHF 4'140</span>
                             </div>
                             <div class="breakdown-row breakdown-total negative">
@@ -404,7 +396,7 @@
                 </li>
                 <li>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                    <strong>Nebenkosten:</strong> Einlösung, Schilder, Admin bei Kauf (Bar/Kredit) - bei Leasing meist inklusive
+                    <strong>Servicekosten:</strong> Jährliche Wartung (Inspektion, Ölwechsel, etc.) - bei Leasing oft im Full-Service inklusive
                 </li>
                 <li>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>

@@ -68,7 +68,7 @@ function updateCarDisplays(inputs) {
     document.getElementById('carPriceDisplay').textContent = formatCHF(inputs.carPrice.value);
     document.getElementById('creditRateDisplay').textContent = `${parseFloat(inputs.creditRate.value).toFixed(1)}%`;
     document.getElementById('leasingRateDisplay').textContent = `${parseFloat(inputs.leasingRate.value).toFixed(1)}%`;
-    document.getElementById('serviceFeesDisplay').textContent = formatCHF(inputs.serviceFees.value);
+    document.getElementById('serviceFeesDisplay').textContent = `${formatCHF(inputs.serviceFees.value)}/Jahr`;
     document.getElementById('durationDisplay').textContent = `${inputs.duration.value} Monate`;
     document.getElementById('investmentReturnDisplay').textContent = `${parseFloat(inputs.investmentReturn.value).toFixed(1)}%`;
     document.getElementById('resultDuration').textContent = inputs.duration.value;
@@ -141,34 +141,46 @@ function calculateCarValue(price, months) {
 }
 
 // BARKAUF calculation
-function calculateBarkauf(availableMoney, carPrice, serviceFees, duration, monthlyReturn, carValueAtEnd) {
+function calculateBarkauf(availableMoney, carPrice, annualServiceFees, duration, monthlyReturn, carValueAtEnd) {
     const data = [];
-    const totalInitialCost = carPrice + serviceFees;
-    let invested = availableMoney - totalInitialCost;
+    let portfolio = availableMoney - carPrice;
+    let totalServicePaid = 0;
 
     // Can't afford cash purchase
-    if (invested < 0) {
+    if (portfolio < 0) {
         for (let m = 0; m <= duration; m++) {
             data.push({ month: m, wealth: 0, portfolio: 0, carValue: 0 });
         }
         return {
             monthlyData: data,
             finalWealth: 0,
-            totalCost: totalInitialCost,
-            serviceFees: serviceFees,
-            initialInvestment: totalInitialCost,
+            totalCost: carPrice,
+            totalServiceCosts: 0,
+            depreciation: 0,
+            carValueAtEnd: 0,
             canAfford: false
         };
     }
 
     for (let m = 0; m <= duration; m++) {
         const carValue = calculateCarValue(carPrice, m);
-        const portfolioValue = invested * Math.pow(1 + monthlyReturn, m);
-        const totalWealth = portfolioValue + carValue;
+
+        if (m > 0) {
+            // Grow portfolio
+            portfolio = portfolio * (1 + monthlyReturn);
+
+            // Pay annual service fee every 12 months
+            if (m % 12 === 0) {
+                portfolio -= annualServiceFees;
+                totalServicePaid += annualServiceFees;
+            }
+        }
+
+        const totalWealth = Math.max(0, portfolio) + carValue;
         data.push({
             month: m,
             wealth: Math.round(totalWealth),
-            portfolio: Math.round(portfolioValue),
+            portfolio: Math.round(Math.max(0, portfolio)),
             carValue: Math.round(carValue)
         });
     }
@@ -176,16 +188,15 @@ function calculateBarkauf(availableMoney, carPrice, serviceFees, duration, month
     const finalPortfolio = data[data.length - 1].portfolio;
     const finalWealth = data[data.length - 1].wealth;
     const depreciation = carPrice - carValueAtEnd;
-    const totalCost = depreciation + serviceFees;
+    const totalCost = depreciation + totalServicePaid;
 
     return {
         monthlyData: data,
         finalWealth,
         finalPortfolio,
         totalCost,
-        serviceFees: serviceFees,
+        totalServiceCosts: totalServicePaid,
         depreciation: depreciation,
-        initialInvestment: totalInitialCost,
         carValueAtEnd: carValueAtEnd,
         canAfford: true
     };
@@ -236,7 +247,7 @@ function calculateLeasing(availableMoney, carPrice, duration, leasingRate, month
 }
 
 // KREDIT calculation
-function calculateKredit(availableMoney, carPrice, serviceFees, duration, creditRate, monthlyReturn, carValueAtEnd) {
+function calculateKredit(availableMoney, carPrice, annualServiceFees, duration, creditRate, monthlyReturn, carValueAtEnd) {
     const data = [];
 
     // Calculate monthly credit payment (annuity formula)
@@ -250,9 +261,9 @@ function calculateKredit(availableMoney, carPrice, serviceFees, duration, credit
             (Math.pow(1 + monthlyInterest, duration) - 1);
     }
 
-    // Service fees are paid upfront
-    let portfolio = availableMoney - serviceFees;
+    let portfolio = availableMoney;
     let remainingDebt = carPrice;
+    let totalServicePaid = 0;
 
     for (let m = 0; m <= duration; m++) {
         const carValue = calculateCarValue(carPrice, m);
@@ -266,6 +277,12 @@ function calculateKredit(availableMoney, carPrice, serviceFees, duration, credit
             const interestPortion = remainingDebt * monthlyInterest;
             const principalPortion = monthlyPayment - interestPortion;
             remainingDebt = Math.max(0, remainingDebt - principalPortion);
+
+            // Pay annual service fee every 12 months
+            if (m % 12 === 0) {
+                portfolio -= annualServiceFees;
+                totalServicePaid += annualServiceFees;
+            }
         }
 
         // Total wealth = portfolio + car value - remaining debt
@@ -284,7 +301,7 @@ function calculateKredit(availableMoney, carPrice, serviceFees, duration, credit
     const totalPaid = monthlyPayment * duration;
     const totalInterestPaid = totalPaid - carPrice;
     const depreciation = carPrice - carValueAtEnd;
-    const totalCost = depreciation + totalInterestPaid + serviceFees;
+    const totalCost = depreciation + totalInterestPaid + totalServicePaid;
 
     return {
         monthlyData: data,
@@ -293,7 +310,7 @@ function calculateKredit(availableMoney, carPrice, serviceFees, duration, credit
         totalCost,
         monthlyPayment: Math.round(monthlyPayment),
         totalInterest: Math.round(totalInterestPaid),
-        serviceFees: serviceFees,
+        totalServiceCosts: totalServicePaid,
         depreciation: depreciation,
         carValueAtEnd: carValueAtEnd,
         duration: duration
@@ -301,19 +318,17 @@ function calculateKredit(availableMoney, carPrice, serviceFees, duration, credit
 }
 
 // Update results display
-function updateResults(barkauf, leasing, kredit, duration, carPrice, serviceFees, carValueAtEnd) {
+function updateResults(barkauf, leasing, kredit, duration, carPrice, annualServiceFees, carValueAtEnd) {
     const formatCHF = (val) => `CHF ${Math.round(val).toLocaleString('de-CH')}`;
     const formatCHFNeg = (val) => `-CHF ${Math.round(Math.abs(val)).toLocaleString('de-CH')}`;
 
     // === BARKAUF Panel ===
     document.getElementById('barkaufKaufpreis').textContent = formatCHF(carPrice);
-    document.getElementById('barkaufNebenkosten').textContent = formatCHF(serviceFees);
-    document.getElementById('barkaufTotalInitial').textContent = formatCHF(carPrice + serviceFees);
     document.getElementById('barkaufPortfolio').textContent = formatCHF(barkauf.finalPortfolio || 0);
     document.getElementById('barkaufCarValue').textContent = formatCHF(carValueAtEnd);
     document.getElementById('barkaufTotal').textContent = formatCHF(barkauf.finalWealth);
     document.getElementById('barkaufDepreciation').textContent = formatCHFNeg(barkauf.depreciation || 0);
-    document.getElementById('barkaufFees').textContent = formatCHFNeg(serviceFees);
+    document.getElementById('barkaufServiceCosts').textContent = formatCHFNeg(barkauf.totalServiceCosts || 0);
     document.getElementById('barkaufTotalCost').textContent = formatCHFNeg(barkauf.totalCost || 0);
 
     // === LEASING Panel ===
@@ -333,7 +348,7 @@ function updateResults(barkauf, leasing, kredit, duration, carPrice, serviceFees
     document.getElementById('kreditCarValue').textContent = formatCHF(carValueAtEnd);
     document.getElementById('kreditTotal').textContent = formatCHF(kredit.finalWealth);
     document.getElementById('kreditDepreciation').textContent = formatCHFNeg(kredit.depreciation);
-    document.getElementById('kreditFeesAndInterest').textContent = formatCHFNeg(kredit.totalInterest + serviceFees);
+    document.getElementById('kreditFeesAndInterest').textContent = formatCHFNeg(kredit.totalInterest + (kredit.totalServiceCosts || 0));
     document.getElementById('kreditTotalCost').textContent = formatCHFNeg(kredit.totalCost);
 
     // Determine best option

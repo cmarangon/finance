@@ -35,6 +35,11 @@ h4 {
     margin-bottom: 0.5rem;
 }
 
+h4 .emoji {
+    -webkit-text-fill-color: initial;
+    background: none;
+}
+
 p {
     color: var(--text-secondary);
     margin-bottom: 1rem;
