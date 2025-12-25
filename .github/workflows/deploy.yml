@@ -35,7 +35,9 @@ jobs:
         run: |
           TIMESTAMP=$(date +%s)
           echo "Using version: $TIMESTAMP"
-          sed -i "s/\?v=[0-9]*/?v=$TIMESTAMP/g" build/index.html
+          # Add version to CSS and JS files (handles both with and without existing ?v= params)
+          sed -i "s/\.css\(?v=[0-9]*\)\?\"/.css?v=$TIMESTAMP\"/g" build/index.html
+          sed -i "s/\.js\(?v=[0-9]*\)\?\"/.js?v=$TIMESTAMP\"/g" build/index.html
 
       - name: Minify CSS files
         run: |
