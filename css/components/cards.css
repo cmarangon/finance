@@ -92,18 +92,7 @@
     color: var(--accent-primary);
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-    .card-sm, .card-md, .card-lg {
-        grid-column: span 6;
-    }
-}
-
-@media (max-width: 768px) {
-    .card-sm, .card-md, .card-lg, .card-full {
-        grid-column: span 12;
-    }
-}
+/* Responsive rules moved to css/responsive.css */
 
 /* Comparison Panels for Car Calculator */
 .comparison-panels {
