@@ -26,8 +26,30 @@
 </head>
 <body>
 
+    <!-- Mobile Header -->
+    <header class="mobile-header" id="mobileHeader">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Navigation öffnen" aria-expanded="false">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <span class="mobile-header-title">Finanzen meistern</span>
+    </header>
+
+    <!-- Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
     <!-- Navigation -->
     <nav id="navbar">
+        <div class="nav-header">
+            <span class="nav-logo">Finanzen</span>
+            <button class="nav-close" id="navCloseBtn" aria-label="Navigation schliessen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
         <ul>
             <li><a href="#hero">Start</a></li>
             <li><a href="#budget">Budget</a></li>
@@ -135,13 +157,14 @@
     </div>
 
     <!-- Modular JavaScript -->
-    <script src="js/config.js?v=3"></script>
-    <script src="js/calculations.js?v=3"></script>
-    <script src="js/storage.js?v=3"></script>
-    <script src="js/charts.js?v=3"></script>
-    <script src="js/modal.js?v=3"></script>
-    <script src="js/router.js?v=3"></script>
-    <script src="js/carCalculator.js?v=3"></script>
-    <script src="js/app.js?v=3"></script>
+    <script src="js/config.js?v=4"></script>
+    <script src="js/calculations.js?v=4"></script>
+    <script src="js/storage.js?v=4"></script>
+    <script src="js/charts.js?v=4"></script>
+    <script src="js/modal.js?v=4"></script>
+    <script src="js/router.js?v=4"></script>
+    <script src="js/carCalculator.js?v=4"></script>
+    <script src="js/mobileNav.js?v=4"></script>
+    <script src="js/app.js?v=4"></script>
 </body>
 </html>

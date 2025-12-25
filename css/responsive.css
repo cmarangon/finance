@@ -16,6 +16,21 @@
 }
 
 /* --------------------------------------------------------------------------
+   Mobile Header & Hamburger Menu
+   -------------------------------------------------------------------------- */
+.mobile-header {
+    display: none;
+}
+
+.nav-header {
+    display: none;
+}
+
+.nav-overlay {
+    display: none;
+}
+
+/* --------------------------------------------------------------------------
    Base Mobile Overrides (< 768px)
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
@@ -25,83 +40,259 @@
         padding-top: var(--nav-height-mobile);
     }
 
-    /* Navigation - Horizontal top bar with hidden scrollbar using clip technique */
-    nav {
+    /* ======================================================================
+       Mobile Header Bar
+       ====================================================================== */
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        bottom: auto;
-        width: 100%;
         height: var(--nav-height-mobile);
-        border-right: none;
+        background: rgba(13, 13, 18, 0.85);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
         border-bottom: 1px solid var(--border);
-        padding: 0;
-        overflow: hidden;
-        z-index: 1000;
+        padding: 0 var(--space-sm);
+        z-index: 1001;
     }
 
-    /* Scrollable nav list - scrollbar hidden via overflow clip on parent */
+    .mobile-header-title {
+        font-family: var(--font-serif);
+        font-size: 1.125rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        letter-spacing: -0.01em;
+    }
+
+    /* ======================================================================
+       Hamburger Button
+       ====================================================================== */
+    .hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        gap: 5px;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+    }
+
+    .hamburger:hover,
+    .hamburger:focus {
+        background: var(--bg-hover);
+        outline: none;
+    }
+
+    .hamburger:active {
+        transform: scale(0.95);
+    }
+
+    .hamburger-line {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--text-primary);
+        border-radius: 2px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+    }
+
+    /* Hamburger to X animation when nav is open */
+    body.nav-open .hamburger-line:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    body.nav-open .hamburger-line:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+
+    body.nav-open .hamburger-line:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* ======================================================================
+       Navigation Overlay
+       ====================================================================== */
+    .nav-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    body.nav-open .nav-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* ======================================================================
+       Navigation Drawer
+       ====================================================================== */
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        max-width: 85vw;
+        height: 100%;
+        background: rgba(13, 13, 18, 0.98);
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        border-right: 1px solid var(--border);
+        padding: 0;
+        z-index: 1002;
+        overflow-y: auto;
+        overflow-x: hidden;
+        transform: translateX(-100%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: none;
+    }
+
+    body.nav-open nav {
+        transform: translateX(0);
+        box-shadow: 8px 0 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Nav Header (inside drawer) */
+    .nav-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-md);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        background: rgba(13, 13, 18, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 10;
+    }
+
+    .nav-logo {
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        font-weight: 600;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .nav-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        cursor: pointer;
+        color: var(--text-secondary);
+        transition: all 0.2s ease;
+    }
+
+    .nav-close:hover,
+    .nav-close:focus {
+        background: var(--bg-hover);
+        border-color: var(--border-accent);
+        color: var(--text-primary);
+        outline: none;
+    }
+
+    .nav-close:active {
+        transform: scale(0.95);
+    }
+
+    /* Nav List */
     nav ul {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         gap: 0.25rem;
-        padding: 0 var(--space-sm);
-        padding-bottom: 30px; /* Push scrollbar below visible area */
-        margin-bottom: -30px; /* Compensate for padding */
-        min-width: max-content;
-        overflow-x: scroll;
-        overflow-y: hidden;
+        padding: var(--space-sm);
+        list-style: none;
+        overflow: visible;
+        width: auto;
+        height: auto;
+        min-width: 0;
+    }
+
+    nav li {
         width: 100%;
-        height: calc(var(--nav-height-mobile) + 30px); /* Extend to hide scrollbar */
-        align-items: center;
-        box-sizing: content-box;
-        /* Scrollbar hiding - Firefox */
-        scrollbar-width: none;
-        /* Scrollbar hiding - IE/Edge */
-        -ms-overflow-style: none;
-    }
-
-    /* Scrollbar hiding - WebKit (Chrome, Safari) */
-    nav ul::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        background: transparent !important;
-        -webkit-appearance: none;
-    }
-
-    nav ul::-webkit-scrollbar-track {
-        background: transparent !important;
-        -webkit-appearance: none;
-    }
-
-    nav ul::-webkit-scrollbar-thumb {
-        background: transparent !important;
-        -webkit-appearance: none;
-    }
-
-    /* Global scrollbar styling for nav - make it invisible if shown */
-    nav::-webkit-scrollbar,
-    nav *::-webkit-scrollbar {
-        display: none;
-        width: 0;
-        height: 0;
     }
 
     nav a {
-        font-size: 0.8125rem;
-        padding: 0.625rem 0.875rem;
-        white-space: nowrap;
-        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        padding: 0.875rem 1rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        white-space: normal;
+        position: relative;
     }
 
     nav a::before {
-        display: none;
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--accent-gradient);
+        border-radius: 0 3px 3px 0;
+        opacity: 0;
+        transition: opacity 0.2s ease;
     }
 
     nav a:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
         transform: none;
+    }
+
+    nav a:active {
+        transform: scale(0.98);
+    }
+
+    nav a.active {
+        background: var(--accent-subtle);
+        color: var(--text-primary);
+        border: 1px solid var(--border-accent);
+    }
+
+    nav a.active::before {
+        opacity: 1;
+    }
+
+    /* Prevent body scroll when nav is open */
+    body.nav-open {
+        overflow: hidden;
     }
 
     /* Sections */
