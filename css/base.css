@@ -6,6 +6,17 @@
     box-sizing: border-box;
 }
 
+/* Text Selection - Accent color */
+::selection {
+    background: rgba(212, 175, 55, 0.4);
+    color: var(--text-primary);
+}
+
+::-moz-selection {
+    background: rgba(212, 175, 55, 0.4);
+    color: var(--text-primary);
+}
+
 html {
     scroll-behavior: smooth;
 }

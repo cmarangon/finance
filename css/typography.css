@@ -53,6 +53,13 @@ p {
     font-weight: 600;
 }
 
+.highlight:hover {
+    -webkit-text-fill-color: transparent;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
 /* Tooltips for Terms */
 .term {
     position: relative;
@@ -91,4 +98,12 @@ p {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) scale(1);
+}
+
+/* Ensure term text stays visible on hover */
+.term:hover {
+    -webkit-text-fill-color: transparent;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
 }
