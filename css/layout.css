@@ -51,10 +51,8 @@ nav a:hover {
 }
 
 nav a.active {
-    color: var(--text-primary);
+    color: var(--accent-primary);
     background: var(--accent-subtle);
-    border: 1px solid var(--border-accent);
-    border-left: 3px solid var(--accent-primary);
 }
 
 /* Sections */
