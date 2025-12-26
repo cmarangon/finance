@@ -26,7 +26,8 @@ const Router = {
         'arten': 'arten',
         'p2p': 'p2p',
         'risiko': 'risiko',
-        'autorechner': 'autorechner'
+        'autorechner': 'autorechner',
+        'wohnrechner': 'wohnrechner'
     },
 
     // Initialize router
@@ -94,6 +95,9 @@ const Router = {
             }
             if (typeof destroyCarChart === 'function') {
                 destroyCarChart();
+            }
+            if (typeof destroyWohnChart === 'function') {
+                destroyWohnChart();
             }
 
             // Get content (from cache or fetch)
@@ -192,6 +196,13 @@ const Router = {
         if (typeof initCarCalculator === 'function') {
             setTimeout(() => {
                 initCarCalculator();
+            }, 100);
+        }
+
+        // Initialize wohn calculator if on that page
+        if (typeof initWohnCalculator === 'function') {
+            setTimeout(() => {
+                initWohnCalculator();
             }, 100);
         }
     },
