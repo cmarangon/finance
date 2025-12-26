@@ -144,7 +144,7 @@ input[type="range"]:focus::-moz-range-thumb {
     justify-content: center;
     background: var(--accent-gradient);
     border-radius: 12px;
-    color: #fff;
+    color: var(--bg-primary);
     box-shadow: 0 4px 12px var(--accent-glow);
 }
 

@@ -14,17 +14,7 @@
     overflow: hidden;
 }
 
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: var(--accent-gradient);
-    opacity: 0;
-    transition: var(--transition-medium);
-}
+/* Top accent bar removed - looked poor with rounded corners */
 
 .card.visible {
     opacity: 1;
@@ -34,12 +24,7 @@
 .card:hover {
     border-color: var(--border-accent);
     background: rgba(26, 26, 36, 0.8);
-    transform: translateY(-6px);
     box-shadow: var(--shadow-glow);
-}
-
-.card:hover::before {
-    opacity: 1;
 }
 
 /* Card Sizes */
@@ -117,7 +102,6 @@
 
 .comparison-panel:hover {
     border-color: var(--border-accent);
-    transform: translateY(-4px);
     box-shadow: var(--shadow-glow);
 }
 

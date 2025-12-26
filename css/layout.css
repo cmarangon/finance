@@ -43,36 +43,18 @@ nav a {
     overflow: hidden;
 }
 
-nav a::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: var(--accent-gradient);
-    opacity: 0;
-    transition: var(--transition-fast);
-}
+/* Left accent bar removed - too small for nav items */
 
 nav a:hover {
     color: var(--text-primary);
     background: var(--bg-hover);
-    transform: translateX(4px);
-}
-
-nav a:hover::before {
-    opacity: 0.5;
 }
 
 nav a.active {
     color: var(--text-primary);
     background: var(--accent-subtle);
     border: 1px solid var(--border-accent);
-}
-
-nav a.active::before {
-    opacity: 1;
+    border-left: 3px solid var(--accent-primary);
 }
 
 /* Sections */
@@ -221,14 +203,13 @@ section {
 
 .step:hover {
     border-color: var(--border-accent);
-    background: var(--bg-tertiary);
 }
 
 .step-number {
     width: 36px;
     height: 36px;
     background: var(--accent-gradient);
-    color: #ffffff;
+    color: var(--bg-primary);
     border-radius: 50%;
     display: flex;
     align-items: center;
