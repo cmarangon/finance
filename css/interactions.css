@@ -1,0 +1,597 @@
+/* ==========================================================================
+   Professional Interaction Effects
+   Refined hover, focus, and active states for a polished, luxury feel
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Custom Easing Functions - Natural, organic motion
+   -------------------------------------------------------------------------- */
+:root {
+    /* Smooth deceleration - feels natural and controlled */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    /* Gentle overshoot - subtle bounce for delight */
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Refined standard - elegant general purpose */
+    --ease-refined: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* Quick snap - immediate response */
+    --ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Timing constants */
+    --duration-instant: 100ms;
+    --duration-quick: 180ms;
+    --duration-smooth: 280ms;
+    --duration-elegant: 400ms;
+}
+
+/* --------------------------------------------------------------------------
+   Global Focus-Visible States - Accessibility first
+   -------------------------------------------------------------------------- */
+*:focus {
+    outline: none;
+}
+
+*:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 3px;
+    border-radius: inherit;
+}
+
+/* Refined focus ring with golden glow */
+.btn:focus-visible,
+.bank-btn:focus-visible,
+.chart-tab:focus-visible,
+.hero-cta:focus-visible {
+    outline: 2px solid var(--accent-secondary);
+    outline-offset: 3px;
+    box-shadow:
+        0 0 0 4px rgba(212, 175, 55, 0.15),
+        0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+nav a:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: -2px;
+    background: var(--accent-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Button Interactions - Refined micro-interactions
+   -------------------------------------------------------------------------- */
+
+/* Base button refinements */
+.btn {
+    transition:
+        transform var(--duration-quick) var(--ease-out-expo),
+        background-color var(--duration-smooth) var(--ease-refined),
+        box-shadow var(--duration-smooth) var(--ease-refined),
+        border-color var(--duration-smooth) var(--ease-refined);
+    will-change: transform;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0) scale(0.98);
+    transition-duration: var(--duration-instant);
+}
+
+/* Primary button - luxurious glow effect */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0) 50%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    opacity: 0;
+    transition: opacity var(--duration-smooth) var(--ease-refined);
+}
+
+.btn-primary:hover::after {
+    opacity: 1;
+}
+
+.btn-primary:hover {
+    box-shadow:
+        0 8px 24px rgba(212, 175, 55, 0.35),
+        0 2px 8px rgba(212, 175, 55, 0.2);
+}
+
+/* Secondary button - subtle border glow */
+.btn-secondary {
+    position: relative;
+}
+
+.btn-secondary::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: var(--accent-gradient);
+    border-radius: inherit;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity var(--duration-smooth) var(--ease-refined);
+}
+
+.btn-secondary:hover::before {
+    opacity: 0.15;
+}
+
+.btn-secondary:hover {
+    border-color: var(--border-accent);
+}
+
+/* Hero CTA - Refined premium interaction */
+.hero-cta {
+    transition:
+        transform var(--duration-smooth) var(--ease-out-expo),
+        box-shadow var(--duration-elegant) var(--ease-refined);
+}
+
+.hero-cta:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 16px 48px rgba(212, 175, 55, 0.35),
+        0 4px 16px rgba(212, 175, 55, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.hero-cta:active {
+    transform: translateY(-2px) scale(0.99);
+    transition-duration: var(--duration-instant);
+}
+
+.hero-cta svg {
+    transition: transform var(--duration-smooth) var(--ease-out-back);
+}
+
+.hero-cta:hover svg {
+    transform: translateY(3px);
+}
+
+/* Settings FAB - Smooth rotation with spring */
+.settings-fab {
+    transition:
+        transform var(--duration-elegant) var(--ease-out-back),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+.settings-fab:hover {
+    transform: scale(1.08) rotate(90deg);
+    box-shadow:
+        0 16px 48px rgba(212, 175, 55, 0.4),
+        0 4px 16px rgba(212, 175, 55, 0.3);
+}
+
+.settings-fab:active {
+    transform: scale(1.02) rotate(90deg);
+    transition-duration: var(--duration-instant);
+}
+
+/* Bank buttons - Subtle lift with glow */
+.bank-btn {
+    transition:
+        transform var(--duration-quick) var(--ease-out-expo),
+        background-color var(--duration-smooth) var(--ease-refined),
+        border-color var(--duration-smooth) var(--ease-refined),
+        box-shadow var(--duration-smooth) var(--ease-refined),
+        color var(--duration-quick) var(--ease-snap);
+    position: relative;
+}
+
+.bank-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    transition: box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+.bank-btn:hover {
+    transform: translateY(-2px);
+}
+
+.bank-btn:hover::after {
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+}
+
+.bank-btn:active {
+    transform: translateY(0);
+    transition-duration: var(--duration-instant);
+}
+
+/* Chart tabs - Refined tab interaction */
+.chart-tab {
+    transition:
+        color var(--duration-quick) var(--ease-snap),
+        background var(--duration-smooth) var(--ease-refined),
+        transform var(--duration-quick) var(--ease-out-expo),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+.chart-tab:hover {
+    transform: translateY(-1px);
+}
+
+.chart-tab:active {
+    transform: translateY(0) scale(0.98);
+    transition-duration: var(--duration-instant);
+}
+
+.chart-tab.active {
+    transform: translateY(-1px);
+}
+
+/* Scroll to top - Elegant float */
+.scroll-top {
+    transition:
+        transform var(--duration-smooth) var(--ease-out-expo),
+        background var(--duration-smooth) var(--ease-refined),
+        border-color var(--duration-smooth) var(--ease-refined),
+        box-shadow var(--duration-elegant) var(--ease-refined),
+        opacity var(--duration-smooth) var(--ease-refined),
+        visibility var(--duration-smooth) var(--ease-refined);
+}
+
+.scroll-top:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 12px 32px rgba(212, 175, 55, 0.25),
+        var(--shadow-lg);
+}
+
+.scroll-top:active {
+    transform: translateY(-2px);
+    transition-duration: var(--duration-instant);
+}
+
+.scroll-top svg {
+    transition:
+        transform var(--duration-smooth) var(--ease-out-back),
+        color var(--duration-quick) var(--ease-snap);
+}
+
+.scroll-top:hover svg {
+    transform: translateY(-3px);
+}
+
+/* --------------------------------------------------------------------------
+   Card Interactions - Elegant depth and reveal
+   -------------------------------------------------------------------------- */
+
+.card {
+    transition:
+        transform var(--duration-smooth) var(--ease-out-expo),
+        border-color var(--duration-smooth) var(--ease-refined),
+        background var(--duration-smooth) var(--ease-refined),
+        box-shadow var(--duration-elegant) var(--ease-refined);
+    will-change: transform;
+}
+
+.card::before {
+    transition: opacity var(--duration-elegant) var(--ease-refined);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 60px rgba(212, 175, 55, 0.1);
+}
+
+/* Card icon pulse on hover */
+.card-icon {
+    transition:
+        transform var(--duration-smooth) var(--ease-out-back),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+.card:hover .card-icon {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+.card-icon svg {
+    transition: transform var(--duration-smooth) var(--ease-out-back);
+}
+
+.card:hover .card-icon svg {
+    transform: scale(1.1);
+}
+
+/* Comparison panels - Refined elevation */
+.comparison-panel {
+    transition:
+        transform var(--duration-smooth) var(--ease-out-expo),
+        border-color var(--duration-smooth) var(--ease-refined),
+        box-shadow var(--duration-elegant) var(--ease-refined);
+}
+
+.comparison-panel:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 16px 32px rgba(0, 0, 0, 0.25),
+        0 0 40px rgba(212, 175, 55, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation Interactions - Smooth sliding reveal
+   -------------------------------------------------------------------------- */
+
+nav a {
+    transition:
+        color var(--duration-quick) var(--ease-snap),
+        background var(--duration-smooth) var(--ease-refined),
+        transform var(--duration-quick) var(--ease-out-expo),
+        padding-left var(--duration-quick) var(--ease-out-expo);
+}
+
+nav a::before {
+    transition:
+        opacity var(--duration-smooth) var(--ease-refined),
+        width var(--duration-quick) var(--ease-out-expo);
+    width: 3px;
+}
+
+nav a:hover {
+    transform: translateX(6px);
+    padding-left: calc(1.125rem + 4px);
+}
+
+nav a:hover::before {
+    opacity: 0.7;
+    width: 4px;
+}
+
+nav a.active::before {
+    width: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Form Input Interactions - Refined focus states
+   -------------------------------------------------------------------------- */
+
+input[type="number"],
+input[type="text"],
+input[type="email"],
+textarea {
+    transition:
+        border-color var(--duration-smooth) var(--ease-refined),
+        background var(--duration-smooth) var(--ease-refined),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+input[type="number"]:hover,
+input[type="text"]:hover,
+input[type="email"]:hover,
+textarea:hover {
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: var(--accent-primary);
+    box-shadow:
+        0 0 0 3px rgba(212, 175, 55, 0.1),
+        0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Range slider - Enhanced thumb interaction */
+input[type="range"]::-webkit-slider-thumb {
+    transition:
+        transform var(--duration-quick) var(--ease-out-back),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow:
+        0 4px 16px rgba(212, 175, 55, 0.5),
+        0 0 0 4px rgba(212, 175, 55, 0.15);
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.1);
+    box-shadow:
+        0 2px 8px rgba(212, 175, 55, 0.4),
+        0 0 0 6px rgba(212, 175, 55, 0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+    transition:
+        transform var(--duration-quick) var(--ease-out-back),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow:
+        0 4px 16px rgba(212, 175, 55, 0.5),
+        0 0 0 4px rgba(212, 175, 55, 0.15);
+}
+
+input[type="range"]:focus {
+    border-color: var(--border-accent);
+}
+
+/* --------------------------------------------------------------------------
+   Step Components - Subtle reveal
+   -------------------------------------------------------------------------- */
+
+.step {
+    transition:
+        border-color var(--duration-smooth) var(--ease-refined),
+        background var(--duration-smooth) var(--ease-refined),
+        transform var(--duration-quick) var(--ease-out-expo),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+.step:hover {
+    transform: translateX(4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.step-number {
+    transition:
+        transform var(--duration-smooth) var(--ease-out-back),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+.step:hover .step-number {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Link Interactions - Elegant underline reveal
+   -------------------------------------------------------------------------- */
+
+a:not(.btn):not(.hero-cta):not(.bank-btn):not(.chart-tab):not(nav a) {
+    position: relative;
+    text-decoration: none;
+    color: var(--accent-primary);
+    transition: color var(--duration-quick) var(--ease-snap);
+}
+
+a:not(.btn):not(.hero-cta):not(.bank-btn):not(.chart-tab):not(nav a)::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent-gradient);
+    transition: width var(--duration-smooth) var(--ease-out-expo);
+}
+
+a:not(.btn):not(.hero-cta):not(.bank-btn):not(.chart-tab):not(nav a):hover {
+    color: var(--accent-secondary);
+}
+
+a:not(.btn):not(.hero-cta):not(.bank-btn):not(.chart-tab):not(nav a):hover::after {
+    width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Feature List - Subtle row highlight
+   -------------------------------------------------------------------------- */
+
+.feature-list li {
+    transition:
+        background var(--duration-smooth) var(--ease-refined),
+        padding-left var(--duration-quick) var(--ease-out-expo);
+    border-radius: 8px;
+    margin: 0 -0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.feature-list li:hover {
+    background: rgba(212, 175, 55, 0.05);
+    padding-left: 0.75rem;
+}
+
+.feature-list li svg {
+    transition: transform var(--duration-smooth) var(--ease-out-back);
+}
+
+.feature-list li:hover svg {
+    transform: scale(1.15);
+}
+
+/* --------------------------------------------------------------------------
+   Info Box - Border glow on hover
+   -------------------------------------------------------------------------- */
+
+.info-box {
+    transition:
+        background var(--duration-smooth) var(--ease-refined),
+        box-shadow var(--duration-smooth) var(--ease-refined);
+}
+
+.info-box:hover {
+    background: rgba(212, 175, 55, 0.08);
+    box-shadow:
+        -3px 0 0 0 var(--accent-primary),
+        0 4px 20px rgba(212, 175, 55, 0.1);
+}
+
+/* --------------------------------------------------------------------------
+   Toast Notification - Smooth entrance
+   -------------------------------------------------------------------------- */
+
+.toast {
+    transition:
+        opacity var(--duration-smooth) var(--ease-out-expo),
+        transform var(--duration-smooth) var(--ease-out-back);
+}
+
+.toast.show {
+    transform: translateY(0) scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   Mobile drawer navigation interactions
+   -------------------------------------------------------------------------- */
+
+.mobile-nav-drawer a {
+    transition:
+        background var(--duration-smooth) var(--ease-refined),
+        padding-left var(--duration-quick) var(--ease-out-expo),
+        color var(--duration-quick) var(--ease-snap);
+}
+
+.mobile-nav-drawer a:hover,
+.mobile-nav-drawer a:active {
+    background: rgba(212, 175, 55, 0.1);
+    padding-left: 1.25rem;
+}
+
+/* Hamburger button interaction */
+.hamburger-btn {
+    transition:
+        background var(--duration-smooth) var(--ease-refined),
+        transform var(--duration-quick) var(--ease-out-back);
+}
+
+.hamburger-btn:hover {
+    background: rgba(212, 175, 55, 0.15);
+}
+
+.hamburger-btn:active {
+    transform: scale(0.95);
+}
+
+.hamburger-btn span {
+    transition:
+        transform var(--duration-smooth) var(--ease-out-expo),
+        opacity var(--duration-quick) var(--ease-snap),
+        background-color var(--duration-quick) var(--ease-snap);
+}
+
+/* --------------------------------------------------------------------------
+   Reduce Motion - Accessibility
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
