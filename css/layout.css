@@ -13,9 +13,107 @@ nav {
     -webkit-backdrop-filter: blur(40px) saturate(180%);
     border-right: 1px solid var(--border);
     padding: 2rem 1.25rem;
-    transition: var(--transition-medium);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
     box-shadow: var(--shadow-lg);
+}
+
+/* Desktop Nav Header */
+.nav-desktop-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-desktop-header .nav-logo {
+    font-family: var(--font-serif);
+    font-size: 1.375rem;
+    font-weight: 600;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+
+/* Nav Toggle Button */
+.nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.nav-toggle:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-accent);
+    color: var(--accent-primary);
+}
+
+.nav-toggle svg {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Collapsed Nav State */
+nav.collapsed {
+    width: 72px;
+    padding: 2rem 1rem;
+    overflow-x: visible;
+}
+
+nav.collapsed .nav-desktop-header {
+    justify-content: center;
+}
+
+nav.collapsed .nav-desktop-header .nav-logo {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+nav.collapsed .nav-toggle svg {
+    transform: rotate(180deg);
+}
+
+nav.collapsed ul {
+    gap: 0.25rem;
+}
+
+nav.collapsed a {
+    padding: 0.75rem;
+    justify-content: center;
+    font-size: 0;
+}
+
+nav.collapsed a::after {
+    content: attr(data-short);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Body margin adjustment for collapsed nav */
+body.nav-collapsed {
+    margin-left: 72px;
+}
+
+body {
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 nav.scrolled {

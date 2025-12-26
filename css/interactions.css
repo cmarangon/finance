@@ -220,16 +220,16 @@ nav a {
         background var(--duration-quick) var(--ease-refined);
 }
 
-/* Remove the left accent bar */
-nav a::before {
+/* Remove the left accent bar (only when nav is expanded) */
+nav:not(.collapsed) a::before {
     display: none;
 }
 
-nav a:hover::before {
+nav:not(.collapsed) a:hover::before {
     display: none;
 }
 
-nav a.active::before {
+nav:not(.collapsed) a.active::before {
     display: none;
 }
 
@@ -359,6 +359,41 @@ a:not(.btn):not(.hero-cta):not(.bank-btn):not(.chart-tab):not(nav a):hover {
 .info-box:hover {
     background: rgba(212, 175, 55, 0.06);
     box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Collapsed Nav Tooltips (Desktop)
+   -------------------------------------------------------------------------- */
+
+nav.collapsed a {
+    position: relative;
+}
+
+nav.collapsed a::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(13, 13, 18, 0.95);
+    border: 1px solid var(--border-accent);
+    color: var(--text-primary);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.15s ease;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+nav.collapsed a:hover::before {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* --------------------------------------------------------------------------

@@ -30,6 +30,8 @@
     display: none;
 }
 
+/* Desktop nav header hidden on mobile, handled in media query below */
+
 /* --------------------------------------------------------------------------
    Base Mobile Overrides (< 768px)
    -------------------------------------------------------------------------- */
@@ -38,6 +40,16 @@
     body {
         margin-left: 0;
         padding-top: var(--nav-height-mobile);
+    }
+
+    /* Hide desktop nav header on mobile */
+    .nav-desktop-header {
+        display: none;
+    }
+
+    /* Disable collapsed state on mobile */
+    body.nav-collapsed {
+        margin-left: 0;
     }
 
     /* ======================================================================

@@ -113,7 +113,108 @@ const MobileNav = {
     }
 };
 
+// Desktop Navigation - Collapsible Sidebar Controller
+const DesktopNav = {
+    // Elements
+    toggleBtn: null,
+    navbar: null,
+    body: null,
+
+    // State
+    isCollapsed: false,
+    storageKey: 'navCollapsed',
+
+    // Initialize desktop navigation
+    init() {
+        this.toggleBtn = document.getElementById('navToggleBtn');
+        this.navbar = document.getElementById('navbar');
+        this.body = document.body;
+
+        // Exit if toggle button doesn't exist
+        if (!this.toggleBtn || !this.navbar) return;
+
+        // Load saved state from localStorage
+        this.loadState();
+
+        // Bind event listeners
+        this.bindEvents();
+    },
+
+    // Load saved collapse state
+    loadState() {
+        const saved = localStorage.getItem(this.storageKey);
+        if (saved === 'true') {
+            this.collapse();
+        }
+    },
+
+    // Save collapse state
+    saveState() {
+        localStorage.setItem(this.storageKey, this.isCollapsed.toString());
+    },
+
+    // Bind event listeners
+    bindEvents() {
+        this.toggleBtn.addEventListener('click', () => this.toggle());
+
+        // Keyboard shortcut: Ctrl+B to toggle (like VS Code)
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'b' && window.innerWidth > 768) {
+                e.preventDefault();
+                this.toggle();
+            }
+        });
+
+        // Handle resize - restore state when switching back to desktop
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                // Only apply collapsed state on desktop
+                if (window.innerWidth > 768 && this.isCollapsed) {
+                    this.navbar.classList.add('collapsed');
+                    this.body.classList.add('nav-collapsed');
+                } else if (window.innerWidth <= 768) {
+                    // Remove collapsed classes on mobile
+                    this.navbar.classList.remove('collapsed');
+                    this.body.classList.remove('nav-collapsed');
+                }
+            }, 100);
+        });
+    },
+
+    // Toggle navigation
+    toggle() {
+        if (this.isCollapsed) {
+            this.expand();
+        } else {
+            this.collapse();
+        }
+    },
+
+    // Collapse navigation
+    collapse() {
+        this.isCollapsed = true;
+        this.navbar.classList.add('collapsed');
+        this.body.classList.add('nav-collapsed');
+        this.toggleBtn.setAttribute('aria-expanded', 'false');
+        this.toggleBtn.setAttribute('aria-label', 'Navigation ausklappen');
+        this.saveState();
+    },
+
+    // Expand navigation
+    expand() {
+        this.isCollapsed = false;
+        this.navbar.classList.remove('collapsed');
+        this.body.classList.remove('nav-collapsed');
+        this.toggleBtn.setAttribute('aria-expanded', 'true');
+        this.toggleBtn.setAttribute('aria-label', 'Navigation einklappen');
+        this.saveState();
+    }
+};
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     MobileNav.init();
+    DesktopNav.init();
 });
