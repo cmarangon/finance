@@ -47,6 +47,18 @@
     background-clip: text;
 }
 
+.hero .tagline {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.15s forwards;
+}
+
 .hero p {
     font-size: 1.25rem;
     color: var(--text-secondary);
