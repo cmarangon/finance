@@ -11,7 +11,7 @@
     opacity: 0;
     transform: translateY(20px);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* Top accent bar removed - looked poor with rounded corners */
