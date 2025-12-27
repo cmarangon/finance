@@ -409,4 +409,16 @@ footer {
     font-size: 0.875rem;
 }
 
+footer .github-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+footer .github-link:hover {
+    color: var(--accent);
+}
+
 /* Responsive rules moved to css/responsive.css for centralized management */
