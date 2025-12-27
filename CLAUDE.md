@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A German-language personal finance education website ("Persönliche Finanzen meistern") built as a static SPA targeting Swiss users. Features interactive calculators, financial charts, and educational content about budgeting, investing, retirement planning, and more.
+A German-language personal finance education website ("PassivErtrag") built as a static SPA targeting Swiss users. Features interactive calculators, financial charts, and educational content about budgeting, investing, retirement planning, and more.
 
 ## Development
 
