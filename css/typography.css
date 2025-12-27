@@ -89,9 +89,13 @@ p {
     opacity: 0;
     visibility: hidden;
     transition: var(--transition-fast);
-    z-index: 100;
+    z-index: 1000;
     border: 1px solid var(--border-accent);
     box-shadow: var(--shadow-xl);
+    /* Reset parent's text-fill-color to make tooltip text visible */
+    -webkit-text-fill-color: var(--text-primary);
+    background-clip: padding-box;
+    -webkit-background-clip: padding-box;
 }
 
 .term:hover .tooltip {
